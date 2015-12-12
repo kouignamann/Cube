@@ -72,7 +72,7 @@
           <manifest>
             <addClasspath>true</addClasspath>
             <mainClass>fr.kouignamann.cube.app.CubeAppLauncher</mainClass>
-            <classpathPrefix>./libs/</classpathPrefix>
+            <classpathPrefix>.\\libs\\</classpathPrefix>
           </manifest>
         </archive>
         <outputDirectory>target/executable</outputDirectory>
@@ -99,7 +99,7 @@
                   <classifier>natives-${env.name}</classifier>
                   <type>jar</type>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/executable/natives</outputDirectory>
+                  <outputDirectory>${project.build.directory}\\executable\\natives</outputDirectory>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -111,7 +111,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/executable/libs</outputDirectory>
+              <outputDirectory>${project.build.directory}\\executable\\libs</outputDirectory>
               <excludeClassifiers>natives-windows,natives-linux,natives-osx</excludeClassifiers>
             </configuration>
           </execution>

@@ -16,7 +16,9 @@ public class CubeAppLauncher {
     static {
         try {
             logger.info("Loading natives");
-            System.setProperty("java.library.path", "target/executable/natives;natives");
+            java.awt.Toolkit.getDefaultToolkit();
+            String libPath = System.getProperty("java.library.path");
+            System.setProperty("java.library.path", libPath + ":target/executable/natives/:natives/");
             Field sysPath = ClassLoader.class.getDeclaredField("sys_paths");
             sysPath.setAccessible(true);
             sysPath.set(null, null);
