@@ -1,7 +1,7 @@
 Projet Cube (Initiation Lwjgl)
 
-Pour construire les differents éléments du projet : mvn clean package
+Construction ses differents éléments du projet : mvn clean package
 
+Execution depuis l'ide : Run fr.kouignamann.cube.app.CubeAppLauncher.java
 
-Depuis l'ide : Run fr.kouignamann.cube.app.CubeAppLauncher.java
-Depuis l'os : Executer "CubeApp.jar" du répertoire target/executable
+Execution depuis l'os : Executer "CubeApp.jar" du répertoire target/executable
