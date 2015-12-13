@@ -29,6 +29,22 @@
     </dependency>
 
     <dependency>
+      <groupId>org.slick2d</groupId>
+      <artifactId>slick2d-core</artifactId>
+      <version>1.0.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.lwjgl.lwjgl</groupId>
+          <artifactId>lwjgl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.jcraft</groupId>
+          <artifactId>jorbis</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>1.7.7</version>
@@ -51,6 +67,20 @@
   <build>
 
     <finalName>CubeApp</finalName>
+
+    <resources>
+      <resource>
+        <directory>shaders</directory>
+        <targetPath>shaders</targetPath>
+      </resource>
+      <resource>
+        <directory>textures</directory>
+        <targetPath>textures</targetPath>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
 
     <plugins>
       <plugin>

@@ -22,7 +22,7 @@ public class FaceBuilder {
     private static final Vector3f CUBE_FACE_POINT_0 = new Vector3f(-0.5f,   0.5f,   0f);    // Left top
     private static final Vector3f CUBE_FACE_POINT_1 = new Vector3f(-0.5f,   -0.5f,  0f);    // Left bottom
     private static final Vector3f CUBE_FACE_POINT_2 = new Vector3f(0.5f,    -0.5f,  0f);    // Right bottom
-    private static final Vector3f CUBE_FACE_POINT_3 = new Vector3f(0.5f,    0.5f,   0f);    // Right left
+    private static final Vector3f CUBE_FACE_POINT_3 = new Vector3f(0.5f,    0.5f,   0f);    // Right top
 
     private final static int[] FACE_INDICES = {
             0,	1,	2,
@@ -31,10 +31,10 @@ public class FaceBuilder {
 
     public static DrawableObject buildFace() {
         FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(Vertex.ELEMENT_COUNT * 4);
-        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_0).getElements());
-        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_1).getElements());
-        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_2).getElements());
-        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_3).getElements());
+        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_0).setColor(ORANGE).setSt(new float[]{0f, 0f}).getElements());
+        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_1).setColor(ORANGE).setSt(new float[]{0f, 1f}).getElements());
+        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_2).setColor(ORANGE).setSt(new float[]{1f, 1f}).getElements());
+        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_3).setColor(ORANGE).setSt(new float[]{1f, 0f}).getElements());
         verticesBuffer.flip();
 
         int vaoId = GL30.glGenVertexArrays();
@@ -42,9 +42,9 @@ public class FaceBuilder {
         int vboId = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboId);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, verticesBuffer, GL15.GL_STATIC_DRAW);
-        GL20.glVertexAttribPointer(0, Vertex.POSITION_ELEMENT_COUNT, GL11.GL_FLOAT, false, Vertex.STRIDE, Vertex.POSITION_BYTE_OFFSET);
-        GL20.glVertexAttribPointer(0, Vertex.COLOR_ELEMENT_COUNT, GL11.GL_FLOAT, false, Vertex.STRIDE, Vertex.COLOR_BYTE_OFFSET);
-        GL20.glVertexAttribPointer(0, Vertex.TEXTURE_ELEMENT_COUNT, GL11.GL_FLOAT, false, Vertex.STRIDE, Vertex.TEXTURE_BYTE_OFFSET);
+        GL20.glVertexAttribPointer(0, Vertex.POSITION_ELEMENT_COUNT, GL11.GL_FLOAT, false, Vertex.STRIDE, 0);
+        GL20.glVertexAttribPointer(1, Vertex.COLOR_ELEMENT_COUNT, GL11.GL_FLOAT, false, Vertex.STRIDE, Vertex.COLOR_BYTE_OFFSET);
+        GL20.glVertexAttribPointer(2, Vertex.TEXTURE_ELEMENT_COUNT, GL11.GL_FLOAT, false, Vertex.STRIDE, Vertex.TEXTURE_BYTE_OFFSET);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 
         IntBuffer indicesBuffer = BufferUtils.createIntBuffer(FACE_INDICES.length);

@@ -36,7 +36,7 @@ public class GlUtils {
         int errorValue = GL11.glGetError();
         if (errorValue != GL11.GL_NO_ERROR) {
             String errorString = GLU.gluErrorString(errorValue);
-            System.err.println("ERROR - " + errorMessage + ": " + errorString);
+            logger.error("ERROR - " + errorMessage + ": " + errorString);
             if (Display.isCreated()) Display.destroy(); {
                 System.exit(-1);
             }
