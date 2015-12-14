@@ -6,16 +6,13 @@
 
 package fr.kouignamann.cube.core.utils;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.regex.Pattern;
-
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.regex.Pattern;
 
 public class TextureUtils {
 
@@ -29,7 +26,7 @@ public class TextureUtils {
 	
 	private static final String TGA_FILE_PATTERN = ".*(tga|TGA)";
 	private static final String TGA_EXT			 = "TGA";
-	
+
 	public static int loadTexture(String fileName) {
 		try {
 			if (Pattern.matches(PNG_FILE_PATTERN, fileName)) {

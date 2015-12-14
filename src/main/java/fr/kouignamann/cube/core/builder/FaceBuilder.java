@@ -13,11 +13,9 @@ import org.lwjgl.util.vector.Vector3f;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-import static fr.kouignamann.cube.core.Constant.*;
+import static fr.kouignamann.cube.core.Constant.ORANGE;
 
 public class FaceBuilder {
-
-    private static final float DELTA_CUBE_SCALE = 1.0f;
 
     private static final Vector3f CUBE_FACE_POINT_0 = new Vector3f(-0.5f,   0.5f,   0f);    // Left top
     private static final Vector3f CUBE_FACE_POINT_1 = new Vector3f(-0.5f,   -0.5f,  0f);    // Left bottom
