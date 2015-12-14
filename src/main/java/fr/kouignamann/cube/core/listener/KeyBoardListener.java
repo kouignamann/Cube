@@ -1,4 +1,4 @@
-package fr.kouignamann.cube.core.controller;
+package fr.kouignamann.cube.core.listener;
 
 import fr.kouignamann.cube.core.Constant;
 import fr.kouignamann.cube.core.CubeAppGraphics;
@@ -35,7 +35,7 @@ public class KeyBoardListener implements Runnable {
 					Thread.sleep(Constant.KEY_HIT_MS_COOLDOWN);
 					keyhitOnCooldown = false;
 				} else {
-					Thread.sleep(Constant.LISTENER_THREADS_COOLDOWN);
+					Thread.sleep(Constant.LISTENER_THREADS_MS_COOLDOWN);
 				}
 			} catch(InterruptedException | IllegalStateException e) {
 				logger.info("Keyboard listening interuption");

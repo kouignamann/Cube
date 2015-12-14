@@ -3,7 +3,7 @@ package fr.kouignamann.cube.app;
 import fr.kouignamann.cube.core.Constant;
 import fr.kouignamann.cube.core.CubeAppGraphics;
 import fr.kouignamann.cube.core.CubeAppLogics;
-import fr.kouignamann.cube.core.controller.KeyBoardListener;
+import fr.kouignamann.cube.core.listener.KeyBoardListener;
 import fr.kouignamann.cube.core.utils.GlUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;

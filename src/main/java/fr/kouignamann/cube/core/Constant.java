@@ -19,5 +19,5 @@ public final class Constant {
 
 	// LISTENERS
 	public final static long		KEY_HIT_MS_COOLDOWN				= 150;
-	public final static long		LISTENER_THREADS_COOLDOWN		= 20;
+	public final static long LISTENER_THREADS_MS_COOLDOWN = 20;
 }
