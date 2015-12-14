@@ -45,7 +45,12 @@ public class TextureUtils {
 		}
 	}
 
-	public static void destroyTexture(int textureId) {
-		GL11.glDeleteTextures(textureId);
+	public static void destroyTextures(int[] textureIds) {
+		if (textureIds == null) {
+			return;
+		}
+		for (int textureId : textureIds) {
+			GL11.glDeleteTextures(textureId);
+		}
 	}
 }

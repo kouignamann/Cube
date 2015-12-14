@@ -3,6 +3,7 @@ package fr.kouignamann.cube.app;
 import fr.kouignamann.cube.core.Constant;
 import fr.kouignamann.cube.core.CubeAppGraphics;
 import fr.kouignamann.cube.core.CubeAppLogics;
+import fr.kouignamann.cube.core.controller.KeyBoardListener;
 import fr.kouignamann.cube.core.utils.GlUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -19,12 +20,16 @@ public class CubeAppLauncher {
         CubeAppGraphics.setup();
         CubeAppLogics.initLogics();
 
+        Thread keyboard = new Thread(new KeyBoardListener());
+        keyboard.start();
+
         // Main loop
         while (!Display.isCloseRequested()) {
             CubeAppGraphics.draw();
             Display.update();
         }
 
+        keyboard.interrupt();
         CubeAppLogics.destroyLogics();
         CubeAppGraphics.destroy();
     }

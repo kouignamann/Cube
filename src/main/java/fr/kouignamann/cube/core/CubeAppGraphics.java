@@ -22,7 +22,9 @@ public class CubeAppGraphics {
 
     private ShaderObject cubaAppShader;
 
-    private int textureId;
+    private int[] textureIds;
+
+    private int textureIdsArrayIndex;
 
     private CubeAppGraphics() {
         super();
@@ -37,14 +39,19 @@ public class CubeAppGraphics {
         CubeAppGraphics.checkCtx();
         CubeAppGraphics.setupOpenGL();
         graphics.cubaAppShader = ShaderUtils.buildCubeAppShader();
-        graphics.textureId = TextureUtils.loadTexture("/textures/mask.png");
+        graphics.textureIds = new int[] {
+                TextureUtils.loadTexture("/textures/mask.png"),
+                TextureUtils.loadTexture("/textures/lol.png"),
+                TextureUtils.loadTexture("/textures/notSureIf.png")
+        };
+        graphics.textureIdsArrayIndex = 0;
     }
 
     public static void destroy() {
         logger.info("Destroying Graphics");
         checkCtx();
         ShaderUtils.destroyCubeAppShader(graphics.cubaAppShader);
-        TextureUtils.destroyTexture(graphics.textureId);
+        TextureUtils.destroyTextures(graphics.textureIds);
         GlUtils.exitOnGLError("CubeAppGraphics destruction failure");
         Display.destroy();
     }
@@ -66,16 +73,19 @@ public class CubeAppGraphics {
         }
 
         GL11.glClearColor(BLUE[0], BLUE[1], BLUE[2], BLUE[3]);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
         GL11.glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGTH);
     }
 
     public static void draw() {
         checkCtx();
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL20.glUseProgram(graphics.cubaAppShader.getShaderProgramId());
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, graphics.textureId);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, graphics.textureIds[graphics.textureIdsArrayIndex]);
 
         List<DrawableObject> drawables = CubeAppLogics.getDrawables();
         for (DrawableObject drawable : drawables) {
@@ -93,6 +103,16 @@ public class CubeAppGraphics {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
         GL30.glBindVertexArray(0);
         GL20.glUseProgram(0);
+    }
+
+    public static void previousTexture() {
+        checkCtx();
+        graphics.textureIdsArrayIndex = (graphics.textureIdsArrayIndex - 1 + graphics.textureIds.length) % graphics.textureIds.length;
+    }
+
+    public static void nextTexture() {
+        checkCtx();
+        graphics.textureIdsArrayIndex = (graphics.textureIdsArrayIndex +1) % graphics.textureIds.length;
     }
 
     private static void checkCtx() {

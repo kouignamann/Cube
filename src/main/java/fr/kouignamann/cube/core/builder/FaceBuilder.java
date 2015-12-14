@@ -13,7 +13,7 @@ import org.lwjgl.util.vector.Vector3f;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-import static fr.kouignamann.cube.core.Constant.ORANGE;
+import static fr.kouignamann.cube.core.Constant.WHITE;
 
 public class FaceBuilder {
 
@@ -29,10 +29,10 @@ public class FaceBuilder {
 
     public static DrawableObject buildFace() {
         FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(Vertex.ELEMENT_COUNT * 4);
-        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_0).setColor(ORANGE).setSt(new float[]{0f, 0f}).getElements());
-        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_1).setColor(ORANGE).setSt(new float[]{0f, 1f}).getElements());
-        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_2).setColor(ORANGE).setSt(new float[]{1f, 1f}).getElements());
-        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_3).setColor(ORANGE).setSt(new float[]{1f, 0f}).getElements());
+        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_0).setColor(WHITE).setSt(new float[]{0f, 0f}).getElements());
+        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_1).setColor(WHITE).setSt(new float[]{0f, 1f}).getElements());
+        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_2).setColor(WHITE).setSt(new float[]{1f, 1f}).getElements());
+        verticesBuffer.put(new Vertex().setPosition(CUBE_FACE_POINT_3).setColor(WHITE).setSt(new float[]{1f, 0f}).getElements());
         verticesBuffer.flip();
 
         int vaoId = GL30.glGenVertexArrays();
