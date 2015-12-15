@@ -43,6 +43,19 @@ public class Vertex {
             POSITION_BYTES_COUNT +
             COLOR_BYTE_COUNT +
             TEXTURE_BYTE_COUNT;
+
+    public Vertex(float x, float y, float z) {
+        xyzw[0] = x;
+        xyzw[1] = y;
+        xyzw[2] = z;
+    }
+
+    public Vertex translate(float x, float y, float z) {
+        xyzw[0] += x;
+        xyzw[1] += y;
+        xyzw[2] += z;
+        return this;
+    }
     
     public float[] getElements() {
         return new float[]{
@@ -62,8 +75,9 @@ public class Vertex {
         return this;
     }
 
-    public Vertex setSt(float[] st) {
-        this.st = new float[] {st[0], st[1]};
+    public Vertex setSt(float s, float t) {
+        this.st[0] = s;
+        this.st[1] = t;
         return this;
     }
 }

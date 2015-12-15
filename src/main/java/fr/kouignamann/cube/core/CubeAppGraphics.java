@@ -40,6 +40,7 @@ public class CubeAppGraphics {
         CubeAppGraphics.setupOpenGL();
         graphics.cubaAppShader = ShaderUtils.buildCubeAppShader();
         graphics.textureIds = new int[] {
+                TextureUtils.loadTexture("/textures/glass.png"),
                 TextureUtils.loadTexture("/textures/mask.png"),
                 TextureUtils.loadTexture("/textures/lol.png"),
                 TextureUtils.loadTexture("/textures/notSureIf.png")

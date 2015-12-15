@@ -22,7 +22,7 @@ public class CubeAppLogics {
         }
         logics = new CubeAppLogics();
 
-        logics.dObjects.add(FaceBuilder.buildFace());
+        logics.dObjects.add(FaceBuilder.build3x3Faces());
     }
 
     public static void destroyLogics() {
