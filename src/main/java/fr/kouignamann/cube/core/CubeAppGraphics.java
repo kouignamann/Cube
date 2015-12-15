@@ -45,6 +45,7 @@ public class CubeAppGraphics {
         graphics.cubeAppShader = new SimpleShader();
         graphics.finalRenderShader = new FinalShader();
         graphics.textureIds = new int[] {
+                TextureUtils.loadTexture("/textures/square-metal-plate.jpg"),
                 TextureUtils.loadTexture("/textures/glass.png"),
                 TextureUtils.loadTexture("/textures/mask.png"),
                 TextureUtils.loadTexture("/textures/lol.png"),
@@ -113,6 +114,11 @@ public class CubeAppGraphics {
 
     public static void drawFBO() {
         checkCtx();
+
+        //http://stackoverflow.com/questions/7357626/framebuffer-and-using-shaders-in-opengl
+        //http://wiki.lwjgl.org/wiki/Render_to_Texture_with_Frame_Buffer_Objects_(FBO)
+        //http://http.developer.nvidia.com/GPUGems/gpugems_ch21.html
+        //http://www.learnopengl.com/#!Advanced-Lighting/Bloom
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, graphics.frameBufferId);
