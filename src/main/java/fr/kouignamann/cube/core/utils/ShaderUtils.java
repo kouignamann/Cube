@@ -1,35 +1,14 @@
 package fr.kouignamann.cube.core.utils;
 
-import fr.kouignamann.cube.core.model.drawable.ShaderObject;
-import org.lwjgl.opengl.GL20;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import fr.kouignamann.cube.core.model.drawable.shader.*;
+import org.lwjgl.opengl.*;
+import org.slf4j.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class ShaderUtils {
 
     private static Logger logger = LoggerFactory.getLogger(ShaderUtils.class);
-
-    public static ShaderObject buildCubeAppShader() {
-        logger.info("Building shader program");
-        int shaderProgramId = GL20.glCreateProgram();
-        int vertexShaderId = loadShader("/shaders/vertex.glsl", GL20.GL_VERTEX_SHADER);
-        int fragmentShaderId = loadShader("/shaders/fragment.glsl", GL20.GL_FRAGMENT_SHADER);
-        GL20.glAttachShader(shaderProgramId, vertexShaderId);
-        GL20.glAttachShader(shaderProgramId, fragmentShaderId);
-        GL20.glBindAttribLocation(shaderProgramId, 0, "in_Position");
-        GL20.glBindAttribLocation(shaderProgramId, 1, "in_Color");
-        GL20.glBindAttribLocation(shaderProgramId, 2, "in_TextureCoord");
-        GL20.glLinkProgram(shaderProgramId);
-        GL20.glValidateProgram(shaderProgramId);
-
-        GlUtils.exitOnGLError("Shader initialization failure");
-        return new ShaderObject(shaderProgramId, vertexShaderId, fragmentShaderId);
-    }
 
     public static void destroyCubeAppShader(ShaderObject shaderObject) {
         logger.info("Destroying shader program");
@@ -41,7 +20,7 @@ public class ShaderUtils {
         GL20.glDeleteProgram(shaderObject.getShaderProgramId());
     }
 
-    private static int loadShader(String filename, int type) {
+    public static int loadShader(String filename, int type) {
         StringBuilder shaderSource = new StringBuilder();
         InputStream resourceInputStream = TextureUtils.class.getResourceAsStream(filename);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceInputStream))) {

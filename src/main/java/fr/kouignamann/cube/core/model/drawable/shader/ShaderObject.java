@@ -1,12 +1,16 @@
-package fr.kouignamann.cube.core.model.drawable;
+package fr.kouignamann.cube.core.model.drawable.shader;
 
-public class ShaderObject {
+public abstract class ShaderObject {
 
     private int shaderProgramId;
     private int vertexShaderId;
     private int fragmentShaderId;
 
-    public ShaderObject(int shaderProgramId, int vertexShaderId, int fragmentShaderId) {
+    protected ShaderObject() {
+        super();
+    }
+
+    protected void setup(int shaderProgramId, int vertexShaderId, int fragmentShaderId) {
         this.shaderProgramId = shaderProgramId;
         this.vertexShaderId = vertexShaderId;
         this.fragmentShaderId = fragmentShaderId;
