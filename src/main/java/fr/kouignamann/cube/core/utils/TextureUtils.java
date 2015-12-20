@@ -6,13 +6,20 @@
 
 package fr.kouignamann.cube.core.utils;
 
-import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.lwjgl.*;
+import org.lwjgl.opengl.*;
+import org.newdawn.slick.opengl.*;
+import org.slf4j.*;
 
-import java.io.IOException;
-import java.util.regex.Pattern;
+import javax.imageio.*;
+import java.awt.*;
+import java.awt.color.*;
+import java.awt.image.*;
+import java.io.*;
+import java.nio.*;
+import java.util.regex.*;
+
+import static fr.kouignamann.cube.core.Constant.*;
 
 public class TextureUtils {
 
@@ -51,6 +58,38 @@ public class TextureUtils {
 		}
 		for (int textureId : textureIds) {
 			GL11.glDeleteTextures(textureId);
+		}
+	}
+
+	public static void saveBufferedTexture(int colorTextureId) {
+		ByteBuffer imgRGBABuffer = BufferUtils.createByteBuffer(SCREEN_WIDTH * SCREEN_HEIGTH * 3);
+		GL11.glReadPixels(0, 0, SCREEN_WIDTH, SCREEN_HEIGTH, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, imgRGBABuffer);
+
+		byte[] array = new byte[SCREEN_WIDTH*SCREEN_HEIGTH*3];
+		imgRGBABuffer.get(array);
+		DataBufferByte dbb = new DataBufferByte(array, imgRGBABuffer.capacity());
+		WritableRaster raster = Raster.createInterleavedRaster(
+				dbb,
+				SCREEN_WIDTH, SCREEN_HEIGTH,
+				SCREEN_WIDTH * 3,
+				3,
+				new int []{ 0, 1, 2 },
+				null);
+
+		ColorModel colorModel =  new ComponentColorModel(
+				ColorSpace.getInstance(ColorSpace.CS_sRGB),
+				new int[] { 8, 8, 8 },
+				false,
+				false,
+				Transparency.OPAQUE,
+				DataBuffer.TYPE_BYTE);
+
+		BufferedImage bfImage = new BufferedImage(colorModel, raster, false, null);
+
+		try {
+			ImageIO.write(bfImage, "png", new File("d:/output.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
