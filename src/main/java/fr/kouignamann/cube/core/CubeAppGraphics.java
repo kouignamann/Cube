@@ -1,16 +1,14 @@
 package fr.kouignamann.cube.core;
 
-import fr.kouignamann.cube.core.model.drawable.DrawableObject;
-import fr.kouignamann.cube.core.model.drawable.ShaderObject;
-import fr.kouignamann.cube.core.utils.GlUtils;
-import fr.kouignamann.cube.core.utils.ShaderUtils;
-import fr.kouignamann.cube.core.utils.TextureUtils;
-import org.lwjgl.LWJGLException;
+import fr.kouignamann.cube.core.model.drawable.*;
+import fr.kouignamann.cube.core.model.drawable.shader.*;
+import fr.kouignamann.cube.core.model.gl.*;
+import fr.kouignamann.cube.core.utils.*;
+import org.lwjgl.*;
 import org.lwjgl.opengl.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
-import java.util.List;
+import java.util.*;
 
 import static fr.kouignamann.cube.core.Constant.*;
 
@@ -21,6 +19,8 @@ public class CubeAppGraphics {
     private static Logger logger = LoggerFactory.getLogger(CubeAppGraphics.class);
 
     private ShaderObject cubaAppShader;
+
+    private Camera cubeAppCamera;
 
     private int[] textureIds;
 
@@ -38,7 +38,8 @@ public class CubeAppGraphics {
         graphics = new CubeAppGraphics();
         CubeAppGraphics.checkCtx();
         CubeAppGraphics.setupOpenGL();
-        graphics.cubaAppShader = ShaderUtils.buildCubeAppShader();
+        graphics.cubaAppShader = new ShaderObject();
+        graphics.cubeAppCamera = new Camera();
         graphics.textureIds = new int[] {
                 TextureUtils.loadTexture("/textures/glass.png"),
                 TextureUtils.loadTexture("/textures/mask.png"),
@@ -51,7 +52,7 @@ public class CubeAppGraphics {
     public static void destroy() {
         logger.info("Destroying Graphics");
         checkCtx();
-        ShaderUtils.destroyCubeAppShader(graphics.cubaAppShader);
+        graphics.cubaAppShader.destroy();
         TextureUtils.destroyTextures(graphics.textureIds);
         GlUtils.exitOnGLError("CubeAppGraphics destruction failure");
         Display.destroy();
@@ -65,7 +66,7 @@ public class CubeAppGraphics {
                     .withForwardCompatible(true)
                     .withProfileCore(true);
 
-            Display.setDisplayMode(new DisplayMode(SCREEN_WIDTH, SCREEN_HEIGTH));
+            Display.setDisplayMode(new DisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT));
             Display.setTitle(WINDOW_NAME);
             Display.create(pixelFormat, contextAtrributes);
         } catch (LWJGLException e) {
@@ -76,14 +77,16 @@ public class CubeAppGraphics {
         GL11.glClearColor(BLUE[0], BLUE[1], BLUE[2], BLUE[3]);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGTH);
+        GL11.glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
     public static void draw() {
         checkCtx();
+        graphics.cubeAppCamera.compute();
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL20.glUseProgram(graphics.cubaAppShader.getShaderProgramId());
+        graphics.cubaAppShader.pushUniforms(graphics.cubeAppCamera);
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, graphics.textureIds[graphics.textureIdsArrayIndex]);

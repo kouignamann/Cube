@@ -1,26 +1,20 @@
 package fr.kouignamann.cube.core.builder;
 
-import fr.kouignamann.cube.core.model.drawable.DrawableObject;
-import fr.kouignamann.cube.core.model.gl.Vertex;
-import fr.kouignamann.cube.core.utils.GlUtils;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import fr.kouignamann.cube.core.model.drawable.*;
+import fr.kouignamann.cube.core.model.gl.*;
+import fr.kouignamann.cube.core.utils.*;
+import org.lwjgl.*;
+import org.lwjgl.opengl.*;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.nio.*;
+import java.util.*;
 
-import static fr.kouignamann.cube.core.Constant.RED;
+import static fr.kouignamann.cube.core.Constant.*;
 
 public class FaceBuilder {
 
-    private final static float FACE_WIDTH = 0.4f;
-    private final static float FACE_MARGIN = 0.02f;
+    private final static float FACE_WIDTH = 100f;
+    private final static float FACE_MARGIN = 1f;
     private final static float FACE_REAL_WIDTH = FACE_WIDTH - FACE_MARGIN;
     private final static float CUBE_UNIT = FACE_REAL_WIDTH / 2.0f;
 
