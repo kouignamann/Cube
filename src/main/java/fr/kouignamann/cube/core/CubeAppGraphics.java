@@ -148,14 +148,12 @@ public class CubeAppGraphics {
 
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 
-
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL20.glUseProgram(graphics.finalRenderShader.getShaderProgramId());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, graphics.colorTextureId);
         GL13.glActiveTexture(GL13.GL_TEXTURE1);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, graphics.colorTextureId);
-
         renderFinalScene();
         GL20.glUseProgram(0);
     }
@@ -192,21 +190,24 @@ public class CubeAppGraphics {
         GL30.glBindVertexArray(graphics.quadVAO);
         GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
         GL30.glBindVertexArray(0);
-        GL20.glDisableVertexAttribArray(0);
-        GL20.glDisableVertexAttribArray(1);
     }
 
     private static void setupFrameBufferObject() {
         checkCtx();
         graphics.frameBufferId = GL30.glGenFramebuffers();
         graphics.colorTextureId = GL11.glGenTextures();
+//        graphics.depthRenderBufferId = GL30.glGenRenderbuffers();
 
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, graphics.frameBufferId);
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, graphics.colorTextureId);
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, SCREEN_WIDTH, SCREEN_HEIGTH, 0, GL11.GL_RGBA, GL11.GL_INT, (ByteBuffer) null);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, 512, 512, 0, GL11.GL_RGBA, GL11.GL_INT, (ByteBuffer) null);
         GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, graphics.colorTextureId, 0);
+
+//        GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, graphics.depthRenderBufferId);
+//        GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL14.GL_DEPTH_COMPONENT24, 512, 512);
+//        GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, graphics.depthRenderBufferId);
 
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 
