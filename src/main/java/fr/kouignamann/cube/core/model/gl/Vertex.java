@@ -6,7 +6,9 @@
 
 package fr.kouignamann.cube.core.model.gl;
 
-import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.*;
+
+import java.nio.*;
 
 public class Vertex {
     
@@ -48,6 +50,20 @@ public class Vertex {
         xyzw[0] = x;
         xyzw[1] = y;
         xyzw[2] = z;
+    }
+
+    private Vertex() {
+        this.xyzw = new float[4];
+        this.rgba = new float[4];
+        this.st = new float[2];
+    }
+
+    public static Vertex readVertex(FloatBuffer verticeBuffer) {
+        Vertex result = new Vertex();
+        verticeBuffer.get(result.xyzw);
+        verticeBuffer.get(result.rgba);
+        verticeBuffer.get(result.st);
+        return result;
     }
 
     public Vertex translate(float x, float y, float z) {

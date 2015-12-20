@@ -75,15 +75,18 @@ public class CubeAppGraphics {
         }
 
         GL11.glClearColor(BLUE[0], BLUE[1], BLUE[2], BLUE[3]);
+        GL11.glClearStencil(0);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
         GL11.glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
     public static void draw() {
         checkCtx();
         graphics.cubeAppCamera.compute();
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL20.glUseProgram(graphics.cubaAppShader.getShaderProgramId());
         graphics.cubaAppShader.pushUniforms(graphics.cubeAppCamera);
@@ -92,14 +95,24 @@ public class CubeAppGraphics {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, graphics.textureIds[graphics.textureIdsArrayIndex]);
 
         List<DrawableObject> drawables = CubeAppLogics.getDrawables();
-        for (DrawableObject drawable : drawables) {
-            GL30.glBindVertexArray(drawable.getVaoId());
+        for (int i=0; i < drawables.size(); i++) {
+            GL11.glStencilFunc(GL11.GL_ALWAYS, i+1, -1);
+            DrawableObject drawableObject = drawables.get(i);
+            GL30.glBindVertexArray(drawableObject.getVaoId());
             GL20.glEnableVertexAttribArray(0);
             GL20.glEnableVertexAttribArray(1);
             GL20.glEnableVertexAttribArray(2);
-            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, drawable.getVboiId());
-            GL11.glDrawElements(GL11.GL_TRIANGLES, drawable.getNbIndices(), GL11.GL_UNSIGNED_INT, 0);
+            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, drawableObject.getVboiId());
+            GL11.glDrawElements(GL11.GL_TRIANGLES, drawableObject.getNbIndices(), GL11.GL_UNSIGNED_INT, 0);
         }
+//        for (DrawableObject drawable : drawables) {
+//            GL30.glBindVertexArray(drawable.getVaoId());
+//            GL20.glEnableVertexAttribArray(0);
+//            GL20.glEnableVertexAttribArray(1);
+//            GL20.glEnableVertexAttribArray(2);
+//            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, drawable.getVboiId());
+//            GL11.glDrawElements(GL11.GL_TRIANGLES, drawable.getNbIndices(), GL11.GL_UNSIGNED_INT, 0);
+//        }
 
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
@@ -127,6 +140,11 @@ public class CubeAppGraphics {
     public static void addCameraRotation(float deltaX, float deltaY) {
         checkCtx();
         graphics.cubeAppCamera.addRotation(deltaX, deltaY);
+    }
+
+    public static Camera getCamera() {
+        checkCtx();
+        return graphics.cubeAppCamera;
     }
 
     private static void checkCtx() {

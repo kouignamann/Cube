@@ -46,12 +46,12 @@ public abstract class DrawableObjectBuilder {
 
         int vboiId = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboiId);
-        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL15.GL_STATIC_DRAW);
+        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL15.GL_DYNAMIC_DRAW);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
         GL30.glBindVertexArray(0);
 
         GlUtils.exitOnGLError("Failed face build");
 
-        return new DrawableObject(vaoId, vboId, vboiId, indicesBuffer.limit());
+        return new DrawableObject(vaoId, vboId, vboiId, indicesBuffer.limit(), verticesBuffer);
     }
 }

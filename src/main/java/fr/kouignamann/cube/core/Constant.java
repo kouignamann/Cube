@@ -21,6 +21,7 @@ public final class Constant {
 
 	// LISTENERS
 	public final static long		KEY_HIT_MS_COOLDOWN				= 150;
+	public final static long		CLICK_MS_COOLDOWN   			= 500;
 	public final static long		LISTENER_THREADS_MS_COOLDOWN	= 20;
 	public final static float		WHEEL_SENSITIVITY   			= 5.0f;
 	public final static float		MOUSE_SENSITIVITY   			= 20.0f;

@@ -1,7 +1,8 @@
 package fr.kouignamann.cube.core.model.drawable;
 
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.*;
+
+import java.nio.*;
 
 public class DrawableObject {
 	
@@ -9,13 +10,16 @@ public class DrawableObject {
 	private int vboId;
 	private int vboiId;
 	private int nbIndices;
+
+	private FloatBuffer verticeBuffer;
 	
-	public DrawableObject(int vaoId, int vboId, int vboiId, int nbIndices) {
+	public DrawableObject(int vaoId, int vboId, int vboiId, int nbIndices, FloatBuffer verticeBuffer) {
 		super();
 		this.vaoId = vaoId;
 		this.vboId = vboId;
 		this.vboiId = vboiId;
 		this.nbIndices = nbIndices;
+		this.verticeBuffer = verticeBuffer;
 	}
 	
 	public void destroy() {

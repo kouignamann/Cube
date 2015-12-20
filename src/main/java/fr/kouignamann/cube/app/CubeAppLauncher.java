@@ -21,6 +21,7 @@ public class CubeAppLauncher {
 
         // Main loop
         while (!Display.isCloseRequested()) {
+            CubeAppLogics.compute();
             CubeAppGraphics.draw();
             Display.update();
         }

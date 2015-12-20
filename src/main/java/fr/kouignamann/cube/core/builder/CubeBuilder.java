@@ -61,4 +61,39 @@ public class CubeBuilder extends DrawableObjectBuilder {
         IntBuffer indicesBuffer = buildIndicesBuffer(FACE_INDICES, 6);
         return buildDrawableObject(verticesBuffer, indicesBuffer);
     }
+
+    public static DrawableObject build3x3x3Cubes() {
+        List<Vertex> faceVertices = new ArrayList<>();
+        faceVertices.addAll(getCubeVectors(-1, 1, 1));
+        faceVertices.addAll(getCubeVectors(0, 1, 1));
+        faceVertices.addAll(getCubeVectors(1, 1, 1));
+        faceVertices.addAll(getCubeVectors(-1, 0, 1));
+        faceVertices.addAll(getCubeVectors(0, 0, 1));
+        faceVertices.addAll(getCubeVectors(1, 0, 1));
+        faceVertices.addAll(getCubeVectors(-1, -1, 1));
+        faceVertices.addAll(getCubeVectors(0, -1, 1));
+        faceVertices.addAll(getCubeVectors(1, -1, 1));
+        faceVertices.addAll(getCubeVectors(-1, 1, 0));
+        faceVertices.addAll(getCubeVectors(0, 1, 0));
+        faceVertices.addAll(getCubeVectors(1, 1, 0));
+        faceVertices.addAll(getCubeVectors(-1, 0, 0));
+        faceVertices.addAll(getCubeVectors(0, 0, 0));
+        faceVertices.addAll(getCubeVectors(1, 0, 0));
+        faceVertices.addAll(getCubeVectors(-1, -1, 0));
+        faceVertices.addAll(getCubeVectors(0, -1, 0));
+        faceVertices.addAll(getCubeVectors(1, -1, 0));
+        faceVertices.addAll(getCubeVectors(-1, 1, -1));
+        faceVertices.addAll(getCubeVectors(0, 1, -1));
+        faceVertices.addAll(getCubeVectors(1, 1, -1));
+        faceVertices.addAll(getCubeVectors(-1, 0, -1));
+        faceVertices.addAll(getCubeVectors(0, 0, -1));
+        faceVertices.addAll(getCubeVectors(1, 0, -1));
+        faceVertices.addAll(getCubeVectors(-1, -1, -1));
+        faceVertices.addAll(getCubeVectors(0, -1, -1));
+        faceVertices.addAll(getCubeVectors(1, -1, -1));
+        faceVertices.stream().forEach(v -> v.setColor(RED));
+        FloatBuffer verticesBuffer = buildVerticeBuffer(faceVertices);
+        IntBuffer indicesBuffer = buildIndicesBuffer(FACE_INDICES, 6*27);
+        return buildDrawableObject(verticesBuffer, indicesBuffer);
+    }
 }

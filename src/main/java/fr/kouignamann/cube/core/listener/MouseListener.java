@@ -101,6 +101,7 @@ public class MouseListener implements Runnable {
     }
 
     private void leftSelectionClick() {
+//        CubeAppLogics.registerScreenClick(Mouse.getX(), Mouse.getY());
     }
 
     private void leftRotationClick() {
