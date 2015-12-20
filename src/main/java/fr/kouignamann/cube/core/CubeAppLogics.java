@@ -1,10 +1,9 @@
 package fr.kouignamann.cube.core;
 
-import fr.kouignamann.cube.core.builder.FaceBuilder;
-import fr.kouignamann.cube.core.model.drawable.DrawableObject;
+import fr.kouignamann.cube.core.builder.*;
+import fr.kouignamann.cube.core.model.drawable.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CubeAppLogics {
 
@@ -22,7 +21,7 @@ public class CubeAppLogics {
         }
         logics = new CubeAppLogics();
 
-        logics.dObjects.add(FaceBuilder.build3x3Faces());
+        logics.dObjects.add(CubeBuilder.buildCube());
     }
 
     public static void destroyLogics() {

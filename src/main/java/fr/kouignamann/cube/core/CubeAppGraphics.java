@@ -119,6 +119,16 @@ public class CubeAppGraphics {
         graphics.textureIdsArrayIndex = (graphics.textureIdsArrayIndex +1) % graphics.textureIds.length;
     }
 
+    public static void addCameraMovement(float movement) {
+        checkCtx();
+        graphics.cubeAppCamera.addMovement(movement);
+    }
+
+    public static void addCameraRotation(float deltaX, float deltaY) {
+        checkCtx();
+        graphics.cubeAppCamera.addRotation(deltaX, deltaY);
+    }
+
     private static void checkCtx() {
         if (graphics == null) {
             throw new IllegalStateException("CubeAppGraphics is null");

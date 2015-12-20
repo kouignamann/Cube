@@ -6,8 +6,8 @@ public final class Constant {
 
 	// SCREEN
 	public final static String		WINDOW_NAME						= "Cube App";
-	public final static int			SCREEN_WIDTH					= 640;
-	public final static int			SCREEN_HEIGHT					= 640;
+	public final static int			SCREEN_WIDTH					= 1024;
+	public final static int			SCREEN_HEIGHT					= 768;
 
 	// COLORS
 	public final static float[]		BLACK							= new float[]{0f, 0f, 0f, 1f};
@@ -22,6 +22,8 @@ public final class Constant {
 	// LISTENERS
 	public final static long		KEY_HIT_MS_COOLDOWN				= 150;
 	public final static long		LISTENER_THREADS_MS_COOLDOWN	= 20;
+	public final static float		WHEEL_SENSITIVITY   			= 5.0f;
+	public final static float		MOUSE_SENSITIVITY   			= 20.0f;
 
 	// CAMERA
 	public static Vector3f			INITIAL_CAMERA_POSITION			= new Vector3f(0, 0, -1);
