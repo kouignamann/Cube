@@ -13,7 +13,6 @@ public class DrawableObjectPart {
     public int getStartIndex() {
         return startIndex;
     }
-
     public int getLength() {
         return length;
     }

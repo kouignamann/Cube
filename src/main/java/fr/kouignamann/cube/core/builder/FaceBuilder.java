@@ -34,7 +34,8 @@ public class FaceBuilder extends DrawableObjectBuilder {
         faceVertices.stream().forEach(v -> v.setColor(RED));
         FloatBuffer verticesBuffer = buildVerticeBuffer(faceVertices);
         IntBuffer indicesBuffer = buildIndicesBuffer(FACE_INDICES, 1);
-        return buildDrawableObject(verticesBuffer, indicesBuffer);
+
+        return buildDrawableObject(verticesBuffer, indicesBuffer, newSingleDrawableObjectPartAsList(FACE_INDICES.length));
     }
 
     public static DrawableObject build3x3Faces() {
@@ -51,6 +52,6 @@ public class FaceBuilder extends DrawableObjectBuilder {
         faceVertices.stream().forEach(v -> v.setColor(RED));
         FloatBuffer verticesBuffer = buildVerticeBuffer(faceVertices);
         IntBuffer indicesBuffer = buildIndicesBuffer(FACE_INDICES, 9);
-        return buildDrawableObject(verticesBuffer, indicesBuffer);
+        return buildDrawableObject(verticesBuffer, indicesBuffer, newSingleDrawableObjectPartAsList(FACE_INDICES.length*9));
     }
 }

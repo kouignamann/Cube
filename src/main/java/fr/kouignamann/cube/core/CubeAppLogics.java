@@ -37,7 +37,7 @@ public class CubeAppLogics {
         }
         logics = new CubeAppLogics();
 
-        logics.dObjects.addAll(CubeBuilder.build3x3x3Cubes());
+        logics.dObjects.add(CubeBuilder.build3x3x3Cubes());
     }
 
     private static void checkCtx() {
@@ -58,7 +58,9 @@ public class CubeAppLogics {
             printClickCoord();
         }
         if (logics.cubeGeometryHasChanged) {
-            logger.info("Changed geometry");
+            for (DrawableObject drawableObject : logics.dObjects) {
+                CubeBuilder.changeDrawableGeometry(drawableObject, logics.currentCubeScale, logics.currentCubeRotation);
+            }
             logics.cubeGeometryHasChanged = false;
         }
     }

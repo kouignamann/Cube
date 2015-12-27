@@ -96,4 +96,8 @@ public class Vertex {
         this.st[1] = t;
         return this;
     }
+
+    public float[] getXyzw() {
+        return xyzw;
+    }
 }

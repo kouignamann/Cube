@@ -103,7 +103,10 @@ public class CubeAppGraphics {
             GL20.glEnableVertexAttribArray(1);
             GL20.glEnableVertexAttribArray(2);
             GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, drawableObject.getVboiId());
-            GL11.glDrawElements(GL11.GL_TRIANGLES, drawableObject.getNbIndices(), GL11.GL_UNSIGNED_INT, 0);
+
+            for (DrawableObjectPart drawableObjectPart : drawableObject.getParts()) {
+                GL11.glDrawElements(GL11.GL_TRIANGLES, drawableObjectPart.getLength(), GL11.GL_UNSIGNED_INT, drawableObjectPart.getStartIndex());
+            }
         }
 //        for (DrawableObject drawable : drawables) {
 //            GL30.glBindVertexArray(drawable.getVaoId());
