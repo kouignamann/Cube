@@ -27,9 +27,13 @@ public final class Constant {
 	public final static float		MOUSE_SENSITIVITY   			= 20.0f;
 
 	// CAMERA
-	public static Vector3f			INITIAL_CAMERA_POSITION			= new Vector3f(0, 0, -1);
-	public static Vector3f			INITIAL_CAMERA_ROTATION			= new Vector3f(0, 0, 0);
+	public final static Vector3f	INITIAL_CAMERA_POSITION			= new Vector3f(0, 0, -1);
+	public final static Vector3f	INITIAL_CAMERA_ROTATION			= new Vector3f(0, 0, 0);
 
 	// GRAPHICS
-	public static int				SCALE							= 500;
+	public final static int			SCALE							= 500;
+
+	// LOGICS
+	public final static float		CUBE_SCALE_SPEED				= 1.0f;
+	public final static float		CUBE_ROTATION_SPEED				= 1.0f;
 }

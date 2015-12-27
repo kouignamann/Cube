@@ -3,6 +3,7 @@ package fr.kouignamann.cube.core.model.drawable;
 import org.lwjgl.opengl.*;
 
 import java.nio.*;
+import java.util.List;
 
 public class DrawableObject {
 	
@@ -12,14 +13,18 @@ public class DrawableObject {
 	private int nbIndices;
 
 	private FloatBuffer verticeBuffer;
+
+	private List<DrawableObjectPart> parts;
 	
-	public DrawableObject(int vaoId, int vboId, int vboiId, int nbIndices, FloatBuffer verticeBuffer) {
+	public DrawableObject(int vaoId, int vboId, int vboiId, int nbIndices,
+						  FloatBuffer verticeBuffer, List<DrawableObjectPart> parts) {
 		super();
 		this.vaoId = vaoId;
 		this.vboId = vboId;
 		this.vboiId = vboiId;
 		this.nbIndices = nbIndices;
 		this.verticeBuffer = verticeBuffer;
+		this.parts = parts;
 	}
 	
 	public void destroy() {
@@ -43,5 +48,8 @@ public class DrawableObject {
 	}
 	public int getNbIndices() {
 		return nbIndices;
+	}
+	public List<DrawableObjectPart> getParts() {
+		return parts;
 	}
 }

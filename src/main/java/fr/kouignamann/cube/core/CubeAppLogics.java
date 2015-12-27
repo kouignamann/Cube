@@ -23,6 +23,10 @@ public class CubeAppLogics {
     private int yClicked = -1;
     private long lastClick = 0;
 
+    private float currentCubeScale = 100.0f;
+    private float currentCubeRotation = 0.0f;
+    private boolean cubeGeometryHasChanged = false;
+
     private CubeAppLogics() {
         dObjects = new ArrayList<>();
     }
@@ -33,24 +37,35 @@ public class CubeAppLogics {
         }
         logics = new CubeAppLogics();
 
-        logics.dObjects.add(CubeBuilder.build3x3x3Cubes());
+        logics.dObjects.addAll(CubeBuilder.build3x3x3Cubes());
     }
 
-    public static void destroyLogics() {
+    private static void checkCtx() {
         if (logics == null) {
             throw new IllegalStateException("CubeAppLogics is null");
         }
+    }
+
+    public static void destroyLogics() {
+        checkCtx();
         logics.dObjects.stream().forEach(DrawableObject::destroy);
         logics = null;
     }
 
     synchronized public static void compute() {
+        checkCtx();
         if (logics.xClicked>=0) {
             printClickCoord();
+        }
+        if (logics.cubeGeometryHasChanged) {
+            logger.info("Changed geometry");
+            logics.cubeGeometryHasChanged = false;
         }
     }
 
     private static void printClickCoord() {
+        checkCtx();
+        //TODO not trustable (& beware of synchronized methods)
         if (Constant.CLICK_MS_COOLDOWN + logics.lastClick < System.currentTimeMillis()) {
             logics.lastClick = System.currentTimeMillis();
             Camera camera = CubeAppGraphics.getCamera();
@@ -81,14 +96,30 @@ public class CubeAppLogics {
     }
 
     public static List<DrawableObject> getDrawables() {
-        if (logics==null) {
-            throw new IllegalStateException("CubeAppLogics wasn t initialized properly (use 'initLogics')");
-        }
+        checkCtx();
         return logics.dObjects;
     }
 
     synchronized public static void registerScreenClick(int x, int y) {
+        checkCtx();
         logics.xClicked = x;
         logics.yClicked = y;
+    }
+
+    synchronized public static void registerCubeScale(boolean increaseScale) {
+        checkCtx();
+        float newScale = logics.currentCubeScale + (increaseScale ? 1f : -1f) * Constant.CUBE_SCALE_SPEED;
+        if (newScale >= 1 && newScale <= 100) {
+            logics.currentCubeScale = newScale;
+            logics.cubeGeometryHasChanged = true;
+        }
+    }
+
+    synchronized public static void registerCubeRotation(boolean directRotation) {
+        checkCtx();
+        logics.currentCubeRotation = logics.currentCubeRotation + (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED;
+        logics.currentCubeRotation = (logics.currentCubeRotation + 100f) % 100f;
+        // TODO beware : i don t think that % operator handles float correctly
+        logics.cubeGeometryHasChanged = true;
     }
 }

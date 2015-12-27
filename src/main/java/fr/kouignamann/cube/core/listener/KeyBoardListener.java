@@ -40,5 +40,25 @@ public class KeyBoardListener implements Runnable {
 			keyhitOnCooldown = true;
 			return;
 		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_1)) {
+			CubeAppLogics.registerCubeScale(true);
+			keyhitOnCooldown = true;
+			return;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_2)) {
+			CubeAppLogics.registerCubeScale(false);
+			keyhitOnCooldown = true;
+			return;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_3)) {
+			CubeAppLogics.registerCubeRotation(true);
+			keyhitOnCooldown = true;
+			return;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_4)) {
+			CubeAppLogics.registerCubeRotation(false);
+			keyhitOnCooldown = true;
+			return;
+		}
 	}
 }

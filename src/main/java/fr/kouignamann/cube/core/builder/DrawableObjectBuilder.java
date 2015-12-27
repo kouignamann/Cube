@@ -33,7 +33,7 @@ public abstract class DrawableObjectBuilder {
         return indicesBuffer;
     }
 
-    protected static DrawableObject buildDrawableObject(FloatBuffer verticesBuffer, IntBuffer indicesBuffer) {
+    protected static DrawableObject buildDrawableObject(FloatBuffer verticesBuffer, IntBuffer indicesBuffer, List<DrawableObjectPart> parts) {
         int vaoId = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vaoId);
         int vboId = GL15.glGenBuffers();
@@ -52,6 +52,6 @@ public abstract class DrawableObjectBuilder {
 
         GlUtils.exitOnGLError("Failed face build");
 
-        return new DrawableObject(vaoId, vboId, vboiId, indicesBuffer.limit(), verticesBuffer);
+        return new DrawableObject(vaoId, vboId, vboiId, indicesBuffer.limit(), verticesBuffer, parts);
     }
 }

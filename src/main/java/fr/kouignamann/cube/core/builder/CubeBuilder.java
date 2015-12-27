@@ -11,7 +11,7 @@ import static fr.kouignamann.cube.core.Constant.*;
 public class CubeBuilder extends DrawableObjectBuilder {
 
     private final static float FACE_WIDTH = 100f;
-    private final static float FACE_MARGIN = 1f;
+    private final static float FACE_MARGIN = 50f;
     private final static float FACE_REAL_WIDTH = FACE_WIDTH - FACE_MARGIN;
     private final static float CUBE_UNIT = FACE_REAL_WIDTH / 2.0f;
 
@@ -59,41 +59,47 @@ public class CubeBuilder extends DrawableObjectBuilder {
         faceVertices.stream().forEach(v -> v.setColor(RED));
         FloatBuffer verticesBuffer = buildVerticeBuffer(faceVertices);
         IntBuffer indicesBuffer = buildIndicesBuffer(FACE_INDICES, 6);
-        return buildDrawableObject(verticesBuffer, indicesBuffer);
+        return buildDrawableObject(verticesBuffer, indicesBuffer, null);
     }
 
     public static DrawableObject build3x3x3Cubes() {
-        List<Vertex> faceVertices = new ArrayList<>();
-        faceVertices.addAll(getCubeVectors(-1, 1, 1));
-        faceVertices.addAll(getCubeVectors(0, 1, 1));
-        faceVertices.addAll(getCubeVectors(1, 1, 1));
-        faceVertices.addAll(getCubeVectors(-1, 0, 1));
-        faceVertices.addAll(getCubeVectors(0, 0, 1));
-        faceVertices.addAll(getCubeVectors(1, 0, 1));
-        faceVertices.addAll(getCubeVectors(-1, -1, 1));
-        faceVertices.addAll(getCubeVectors(0, -1, 1));
-        faceVertices.addAll(getCubeVectors(1, -1, 1));
-        faceVertices.addAll(getCubeVectors(-1, 1, 0));
-        faceVertices.addAll(getCubeVectors(0, 1, 0));
-        faceVertices.addAll(getCubeVectors(1, 1, 0));
-        faceVertices.addAll(getCubeVectors(-1, 0, 0));
-        faceVertices.addAll(getCubeVectors(0, 0, 0));
-        faceVertices.addAll(getCubeVectors(1, 0, 0));
-        faceVertices.addAll(getCubeVectors(-1, -1, 0));
-        faceVertices.addAll(getCubeVectors(0, -1, 0));
-        faceVertices.addAll(getCubeVectors(1, -1, 0));
-        faceVertices.addAll(getCubeVectors(-1, 1, -1));
-        faceVertices.addAll(getCubeVectors(0, 1, -1));
-        faceVertices.addAll(getCubeVectors(1, 1, -1));
-        faceVertices.addAll(getCubeVectors(-1, 0, -1));
-        faceVertices.addAll(getCubeVectors(0, 0, -1));
-        faceVertices.addAll(getCubeVectors(1, 0, -1));
-        faceVertices.addAll(getCubeVectors(-1, -1, -1));
-        faceVertices.addAll(getCubeVectors(0, -1, -1));
-        faceVertices.addAll(getCubeVectors(1, -1, -1));
-        faceVertices.stream().forEach(v -> v.setColor(RED));
-        FloatBuffer verticesBuffer = buildVerticeBuffer(faceVertices);
+        List<Vertex> cubeVertices = new ArrayList<>();
+        List<DrawableObjectPart> cubeParts = new ArrayList<>();
+        cubeVertices.addAll(getCubeVectors(-1, 1, 1));
+        cubeVertices.addAll(getCubeVectors(0, 1, 1));
+        cubeVertices.addAll(getCubeVectors(1, 1, 1));
+        cubeVertices.addAll(getCubeVectors(-1, 0, 1));
+        cubeVertices.addAll(getCubeVectors(0, 0, 1));
+        cubeVertices.addAll(getCubeVectors(1, 0, 1));
+        cubeVertices.addAll(getCubeVectors(-1, -1, 1));
+        cubeVertices.addAll(getCubeVectors(0, -1, 1));
+        cubeVertices.addAll(getCubeVectors(1, -1, 1));
+        cubeVertices.addAll(getCubeVectors(-1, 1, 0));
+        cubeVertices.addAll(getCubeVectors(0, 1, 0));
+        cubeVertices.addAll(getCubeVectors(1, 1, 0));
+        cubeVertices.addAll(getCubeVectors(-1, 0, 0));
+        cubeVertices.addAll(getCubeVectors(0, 0, 0));
+        cubeVertices.addAll(getCubeVectors(1, 0, 0));
+        cubeVertices.addAll(getCubeVectors(-1, -1, 0));
+        cubeVertices.addAll(getCubeVectors(0, -1, 0));
+        cubeVertices.addAll(getCubeVectors(1, -1, 0));
+        cubeVertices.addAll(getCubeVectors(-1, 1, -1));
+        cubeVertices.addAll(getCubeVectors(0, 1, -1));
+        cubeVertices.addAll(getCubeVectors(1, 1, -1));
+        cubeVertices.addAll(getCubeVectors(-1, 0, -1));
+        cubeVertices.addAll(getCubeVectors(0, 0, -1));
+        cubeVertices.addAll(getCubeVectors(1, 0, -1));
+        cubeVertices.addAll(getCubeVectors(-1, -1, -1));
+        cubeVertices.addAll(getCubeVectors(0, -1, -1));
+        cubeVertices.addAll(getCubeVectors(1, -1, -1));
+        cubeVertices.stream().forEach(v -> v.setColor(RED));
+        FloatBuffer verticesBuffer = buildVerticeBuffer(cubeVertices);
         IntBuffer indicesBuffer = buildIndicesBuffer(FACE_INDICES, 6*27);
-        return buildDrawableObject(verticesBuffer, indicesBuffer);
+
+        int nbIndicesPerCube = FACE_INDICES.length;
+        for (int i = 0; i < cubeVertices.size(); i++) {
+            cubeParts.add(new DrawableObjectPart(i*nbIndicesPerCube, nbIndicesPerCube));
+        }
+        return buildDrawableObject(verticesBuffer, indicesBuffer, cubeParts);
     }
 }
