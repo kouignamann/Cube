@@ -1,14 +1,11 @@
 package fr.kouignamann.cube.app;
 
-import fr.kouignamann.cube.core.Constant;
-import fr.kouignamann.cube.core.GraphicContext;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import fr.kouignamann.cube.core.*;
+import org.lwjgl.*;
+import org.lwjgl.opengl.*;
+import org.slf4j.*;
 
-import java.lang.reflect.Field;
-import java.util.Map;
+import java.lang.reflect.*;
 
 public class CubeAppLauncher {
 
@@ -18,11 +15,11 @@ public class CubeAppLauncher {
         try {
             logger.info("Loading natives");
             java.awt.Toolkit.getDefaultToolkit();
-            String libPath = System.getProperty("java.library.path");
-            char libPathSeparator = libPath.contains(";") ? ';' : ':';
+            String javaLibPath = System.getProperty("java.library.path");
+            String pathSeparator = System.getProperty("path.separator");
             System.setProperty(
                     "java.library.path",
-                    libPath + libPathSeparator + "target/executable/natives/" + libPathSeparator + "natives/");
+                    javaLibPath + pathSeparator + "target/executable/natives/" + pathSeparator + "natives/");
             Field sysPath = ClassLoader.class.getDeclaredField("sys_paths");
             sysPath.setAccessible(true);
             sysPath.set(null, null);
