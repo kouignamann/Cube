@@ -1,12 +1,10 @@
 package fr.kouignamann.cube.core.utils;
 
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.lwjgl.opengl.*;
+import org.lwjgl.util.glu.*;
+import org.slf4j.*;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 
 public class GlUtils {
 
@@ -16,11 +14,11 @@ public class GlUtils {
         try {
             logger.info("Loading natives");
             java.awt.Toolkit.getDefaultToolkit();
-            String libPath = System.getProperty("java.library.path");
-            char libPathSeparator = libPath.contains(";") ? ';' : ':';
+            String javaLibPath = System.getProperty("java.library.path");
+            String pathSeparator = System.getProperty("path.separator");
             System.setProperty(
                     "java.library.path",
-                    libPath + libPathSeparator + "target/executable/natives/" + libPathSeparator + "natives/");
+                    javaLibPath + pathSeparator + "target/executable/natives/" + pathSeparator + "natives/");
             Field sysPath = ClassLoader.class.getDeclaredField("sys_paths");
             sysPath.setAccessible(true);
             sysPath.set(null, null);
