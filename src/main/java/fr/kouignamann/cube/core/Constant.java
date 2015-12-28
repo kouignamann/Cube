@@ -20,7 +20,7 @@ public final class Constant {
 	public final static float[]		TRANSPARENT						= new float[]{1f, 1f, 1f, 0f};
 
 	// LISTENERS
-	public final static long		KEY_HIT_MS_COOLDOWN				= 150;
+	public final static long		KEY_HIT_MS_COOLDOWN				= 50;
 	public final static long		CLICK_MS_COOLDOWN   			= 500;
 	public final static long		LISTENER_THREADS_MS_COOLDOWN	= 20;
 	public final static float		WHEEL_SENSITIVITY   			= 5.0f;

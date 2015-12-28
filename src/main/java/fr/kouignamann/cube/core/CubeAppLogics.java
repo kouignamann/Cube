@@ -6,6 +6,7 @@ import fr.kouignamann.cube.core.model.gl.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.glu.*;
+import org.lwjgl.util.vector.*;
 import org.slf4j.*;
 
 import java.nio.*;
@@ -24,7 +25,7 @@ public class CubeAppLogics {
     private long lastClick = 0;
 
     private float currentCubeScale = 100.0f;
-    private float currentCubeRotation = 0.0f;
+    private Vector3f currentCubeRotation = new Vector3f(0.0f, 0.0f, 0.0f);
     private boolean cubeGeometryHasChanged = false;
 
     private CubeAppLogics() {
@@ -117,11 +118,24 @@ public class CubeAppLogics {
         }
     }
 
-    synchronized public static void registerCubeRotation(boolean directRotation) {
+    synchronized public static void registerXCubeRotation(boolean directRotation) {
         checkCtx();
-        logics.currentCubeRotation = logics.currentCubeRotation + (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED;
-        logics.currentCubeRotation = (logics.currentCubeRotation + 100f) % 100f;
-        // TODO beware : i don t think that % operator handles float correctly
+        float xRotation = logics.currentCubeRotation.getX();
+        logics.currentCubeRotation.setX(xRotation + (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED);
+        logics.cubeGeometryHasChanged = true;
+    }
+
+    synchronized public static void registerYCubeRotation(boolean directRotation) {
+        checkCtx();
+        float yRotation = logics.currentCubeRotation.getY();
+        logics.currentCubeRotation.setY(yRotation + (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED);
+        logics.cubeGeometryHasChanged = true;
+    }
+
+    synchronized public static void registerZCubeRotation(boolean directRotation) {
+        checkCtx();
+        float zRotation = logics.currentCubeRotation.getZ();
+        logics.currentCubeRotation.setZ(zRotation + (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED);
         logics.cubeGeometryHasChanged = true;
     }
 }

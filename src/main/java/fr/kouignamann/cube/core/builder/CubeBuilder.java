@@ -4,6 +4,7 @@ import fr.kouignamann.cube.core.model.drawable.*;
 import fr.kouignamann.cube.core.model.gl.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
+import org.lwjgl.util.vector.*;
 import org.slf4j.*;
 
 import java.nio.*;
@@ -60,28 +61,47 @@ public class CubeBuilder extends DrawableObjectBuilder {
         );
     }
 
-    public static void changeDrawableGeometry(DrawableObject drawableObject, float scale, float angle) {
+    public static void changeDrawableGeometry(DrawableObject drawableObject, float scale, Vector3f angle) {
         FloatBuffer verticeBuffer = drawableObject.getVerticeBuffer();
         FloatBuffer newVerticeBuffer = BufferUtils.createFloatBuffer(verticeBuffer.limit());
 
+        float realScale = 0.5f-(scale/200f);
+
         List<Vertex> vertice = new ArrayList<>();
+        Map<Vector4fComparable, Vector4fComparable> positionsMap = new HashMap<>();
         while (verticeBuffer.hasRemaining()) {
             int i = NB_VERTICE_PER_CUBE;
             while (i > 0) {
                 Vertex vertex = Vertex.readVertex(verticeBuffer);
+                Vector4fComparable position = new Vector4fComparable(vertex);
                 vertice.add(vertex);
+                if (!positionsMap.containsKey(position)) {
+                    positionsMap.put(position, position.clone());
+                }
                 i--;
             }
-            logger.info("Cube points = " + vertice.size());
 
-            // TODO change geometry here
-            vertice.stream().forEach(v -> v.setColor(GREEN));
+            List<Vector4fComparable> orderedPositionsToChange =
+                    Vector4fComparable.orderOpposedVertex(new ArrayList<>(positionsMap.values()));
+
+            for (int index=0; index< orderedPositionsToChange.size(); ) {
+                Vector4f vector1 = orderedPositionsToChange.get(index++);
+                Vector4f vector2 = orderedPositionsToChange.get(index++);
+
+                // Translation
+                Vector4f translationVector = (Vector4f) Vector4f.sub(vector1, vector2, null).scale(realScale);
+                Vector4f.sub(vector1, translationVector, vector1);
+                Vector4f.add(vector2, translationVector, vector2);
+            }
 
             for (Vertex vertex : vertice) {
+                Vector4fComparable vectorComparable = new Vector4fComparable(vertex);
+                vertex.setPosition(positionsMap.get(vectorComparable));
                 newVerticeBuffer.put(vertex.getElements());
             }
 
             vertice.clear();
+            positionsMap.clear();
         }
         newVerticeBuffer.flip();
 

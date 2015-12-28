@@ -40,23 +40,43 @@ public class KeyBoardListener implements Runnable {
 			keyhitOnCooldown = true;
 			return;
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_1)) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_ADD)) {
 			CubeAppLogics.registerCubeScale(true);
 			keyhitOnCooldown = true;
 			return;
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_2)) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_SUBTRACT)) {
 			CubeAppLogics.registerCubeScale(false);
 			keyhitOnCooldown = true;
 			return;
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_3)) {
-			CubeAppLogics.registerCubeRotation(true);
+		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD6)) {
+			CubeAppLogics.registerXCubeRotation(true);
 			keyhitOnCooldown = true;
 			return;
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_4)) {
-			CubeAppLogics.registerCubeRotation(false);
+		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD4)) {
+			CubeAppLogics.registerXCubeRotation(false);
+			keyhitOnCooldown = true;
+			return;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD8)) {
+			CubeAppLogics.registerYCubeRotation(true);
+			keyhitOnCooldown = true;
+			return;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD2)) {
+			CubeAppLogics.registerYCubeRotation(false);
+			keyhitOnCooldown = true;
+			return;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD9)) {
+			CubeAppLogics.registerZCubeRotation(true);
+			keyhitOnCooldown = true;
+			return;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD1)) {
+			CubeAppLogics.registerZCubeRotation(false);
 			keyhitOnCooldown = true;
 			return;
 		}

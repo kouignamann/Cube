@@ -81,8 +81,10 @@ public class Vertex {
         };
     }
     
-	public Vertex setPosition(Vector3f vector3f) {
-        this.xyzw = new float[] {vector3f.getX(),vector3f.getY(), vector3f.getZ(), 1.0f};
+	public Vertex setPosition(Vector4f vector4f) {
+        //TODO see what happens when uncomment
+//        this.xyzw = new float[] {vector4f.getX(),vector4f.getY(), vector4f.getZ(), vector4f.getW()};
+        this.xyzw = new float[] {vector4f.getX(),vector4f.getY(), vector4f.getZ(), 1};
         return this;
     }
 
