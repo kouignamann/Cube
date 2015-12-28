@@ -70,6 +70,7 @@ public class CubeBuilder extends DrawableObjectBuilder {
         List<Vertex> vertice = new ArrayList<>();
         Map<Vector4fComparable, Vector4fComparable> positionsMap = new HashMap<>();
         while (verticeBuffer.hasRemaining()) {
+            // One pass per cube
             int i = NB_VERTICE_PER_CUBE;
             while (i > 0) {
                 Vertex vertex = Vertex.readVertex(verticeBuffer);
@@ -84,6 +85,12 @@ public class CubeBuilder extends DrawableObjectBuilder {
             List<Vector4fComparable> orderedPositionsToChange =
                     Vector4fComparable.orderOpposedVertex(new ArrayList<>(positionsMap.values()));
 
+//            Vector4f rotationCenter = (Vector4f) Vector4f.add(
+//                    orderedPositionsToChange.get(0),
+//                    orderedPositionsToChange.get(1),
+//                    null)
+//                    .scale(0.5f);
+
             for (int index=0; index< orderedPositionsToChange.size(); ) {
                 Vector4f vector1 = orderedPositionsToChange.get(index++);
                 Vector4f vector2 = orderedPositionsToChange.get(index++);
@@ -92,6 +99,8 @@ public class CubeBuilder extends DrawableObjectBuilder {
                 Vector4f translationVector = (Vector4f) Vector4f.sub(vector1, vector2, null).scale(realScale);
                 Vector4f.sub(vector1, translationVector, vector1);
                 Vector4f.add(vector2, translationVector, vector2);
+
+                // Rotation
             }
 
             for (Vertex vertex : vertice) {
