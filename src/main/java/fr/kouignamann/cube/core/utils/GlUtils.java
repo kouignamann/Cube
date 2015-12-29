@@ -22,7 +22,6 @@ public class GlUtils {
             Field sysPath = ClassLoader.class.getDeclaredField("sys_paths");
             sysPath.setAccessible(true);
             sysPath.set(null, null);
-            System.loadLibrary("lwjgl64");
         }
         catch (NoSuchFieldException | IllegalAccessException | UnsatisfiedLinkError e) {
             logger.error("Loading natives error", e);
