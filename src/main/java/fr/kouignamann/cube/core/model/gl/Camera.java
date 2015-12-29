@@ -4,6 +4,8 @@ import fr.kouignamann.cube.core.*;
 import fr.kouignamann.cube.core.utils.*;
 import org.lwjgl.util.vector.*;
 
+import static fr.kouignamann.cube.core.utils.MathUtils.RotationAxis.*;
+
 public class Camera {
 
     private Matrix4f projectionMatrix = null;
@@ -48,9 +50,9 @@ public class Camera {
         
         Matrix4f.translate(cameraPosition, viewMatrix, viewMatrix);
         
-        Matrix4f.rotate(cameraRotation.x, MathUtils.X_AXIS_VECTOR, viewMatrix, viewMatrix);
-        Matrix4f.rotate(cameraRotation.y, MathUtils.Y_AXIS_VECTOR, viewMatrix, viewMatrix);
-        Matrix4f.rotate(cameraRotation.z, MathUtils.Z_AXIS_VECTOR, viewMatrix, viewMatrix);
+        Matrix4f.rotate(cameraRotation.x, X_AXIS.vector, viewMatrix, viewMatrix);
+        Matrix4f.rotate(cameraRotation.y, Y_AXIS.vector, viewMatrix, viewMatrix);
+        Matrix4f.rotate(cameraRotation.z, Z_AXIS.vector, viewMatrix, viewMatrix);
     }
 	
     public void addRotation(float deltaX, float deltaY)

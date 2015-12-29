@@ -35,5 +35,5 @@ public final class Constant {
 
 	// LOGICS
 	public final static float		CUBE_SCALE_SPEED				= 1.0f;
-	public final static float		CUBE_ROTATION_SPEED				= 1.0f;
+	public final static float		CUBE_ROTATION_SPEED				= 0.05f;
 }

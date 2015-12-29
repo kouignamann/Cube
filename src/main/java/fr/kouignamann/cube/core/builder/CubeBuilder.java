@@ -2,6 +2,7 @@ package fr.kouignamann.cube.core.builder;
 
 import fr.kouignamann.cube.core.model.drawable.*;
 import fr.kouignamann.cube.core.model.gl.*;
+import fr.kouignamann.cube.core.utils.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.*;
@@ -11,6 +12,7 @@ import java.nio.*;
 import java.util.*;
 
 import static fr.kouignamann.cube.core.Constant.*;
+import static fr.kouignamann.cube.core.utils.MathUtils.RotationAxis.*;
 
 public class CubeBuilder extends DrawableObjectBuilder {
 
@@ -67,14 +69,18 @@ public class CubeBuilder extends DrawableObjectBuilder {
 
         float realScale = 0.5f-(scale/200f);
 
+        float[] xRotationMatrix = MathUtils.computeRotationAnimationMatrix(angle, X_AXIS);
+        float[] yRotationMatrix = MathUtils.computeRotationAnimationMatrix(angle, Y_AXIS);
+        float[] zRotationMatrix = MathUtils.computeRotationAnimationMatrix(angle, Z_AXIS);
+
         List<Vertex> vertice = new ArrayList<>();
-        Map<Vector4fComparable, Vector4fComparable> positionsMap = new HashMap<>();
+        Map<CubAppVector4f, CubAppVector4f> positionsMap = new HashMap<>();
         while (verticeBuffer.hasRemaining()) {
             // One pass per cube
             int i = NB_VERTICE_PER_CUBE;
             while (i > 0) {
                 Vertex vertex = Vertex.readVertex(verticeBuffer);
-                Vector4fComparable position = new Vector4fComparable(vertex);
+                CubAppVector4f position = new CubAppVector4f(vertex);
                 vertice.add(vertex);
                 if (!positionsMap.containsKey(position)) {
                     positionsMap.put(position, position.clone());
@@ -82,29 +88,31 @@ public class CubeBuilder extends DrawableObjectBuilder {
                 i--;
             }
 
-            List<Vector4fComparable> orderedPositionsToChange =
-                    Vector4fComparable.orderOpposedVertex(new ArrayList<>(positionsMap.values()));
+            List<CubAppVector4f> orderedPositionsToChange =
+                    CubAppVector4f.orderOpposedVertex(new ArrayList<>(positionsMap.values()));
 
-//            Vector4f rotationCenter = (Vector4f) Vector4f.add(
-//                    orderedPositionsToChange.get(0),
-//                    orderedPositionsToChange.get(1),
-//                    null)
-//                    .scale(0.5f);
+            Vector4f rotationCenter = (Vector4f) Vector4f.add(
+                    orderedPositionsToChange.get(0),
+                    orderedPositionsToChange.get(1),
+                    null)
+                    .scale(0.5f);
 
             for (int index=0; index< orderedPositionsToChange.size(); ) {
-                Vector4f vector1 = orderedPositionsToChange.get(index++);
-                Vector4f vector2 = orderedPositionsToChange.get(index++);
+                CubAppVector4f vector1 = orderedPositionsToChange.get(index++);
+                CubAppVector4f vector2 = orderedPositionsToChange.get(index++);
 
                 // Translation
                 Vector4f translationVector = (Vector4f) Vector4f.sub(vector1, vector2, null).scale(realScale);
                 Vector4f.sub(vector1, translationVector, vector1);
                 Vector4f.add(vector2, translationVector, vector2);
 
-                // Rotation
+                // Rotations
+                vector1.rotate(rotationCenter, xRotationMatrix, yRotationMatrix, zRotationMatrix);
+                vector2.rotate(rotationCenter, xRotationMatrix, yRotationMatrix, zRotationMatrix);
             }
 
             for (Vertex vertex : vertice) {
-                Vector4fComparable vectorComparable = new Vector4fComparable(vertex);
+                CubAppVector4f vectorComparable = new CubAppVector4f(vertex);
                 vertex.setPosition(positionsMap.get(vectorComparable));
                 newVerticeBuffer.put(vertex.getElements());
             }
@@ -122,6 +130,7 @@ public class CubeBuilder extends DrawableObjectBuilder {
     }
 
     public static DrawableObject buildCube() {
+        logger.info("Building single cube");
         List<Vertex> faceVertices = getCubeVectors(0, 0, 0);
         faceVertices.stream().forEach(v -> v.setColor(RED));
         FloatBuffer verticesBuffer = buildVerticeBuffer(faceVertices);
@@ -130,6 +139,7 @@ public class CubeBuilder extends DrawableObjectBuilder {
     }
 
     public static DrawableObject build3x3x3Cubes() {
+        logger.info("Building 3 x 3 x 3 cubes");
         List<Vertex> cubeVertices = new ArrayList<>();
         List<DrawableObjectPart> cubeParts = new ArrayList<>();
         cubeVertices.addAll(getCubeVectors(-1, 1, 1));
