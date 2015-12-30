@@ -1,10 +1,12 @@
 package fr.kouignamann.cube.core.model.gl;
 
-import fr.kouignamann.cube.core.*;
-import fr.kouignamann.cube.core.utils.*;
-import org.lwjgl.util.vector.*;
-
 import static fr.kouignamann.cube.core.utils.MathUtils.RotationAxis.*;
+
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
+
+import fr.kouignamann.cube.core.Constant;
+import fr.kouignamann.cube.core.utils.MathUtils;
 
 public class Camera {
 
@@ -45,7 +47,7 @@ public class Camera {
         Matrix4f.scale(modelScale, modelMatrix, modelMatrix);
     }
 	
-    public void compute() {
+    public Camera compute() {
         viewMatrix.setIdentity();
         
         Matrix4f.translate(cameraPosition, viewMatrix, viewMatrix);
@@ -53,6 +55,7 @@ public class Camera {
         Matrix4f.rotate(cameraRotation.x, X_AXIS.vector, viewMatrix, viewMatrix);
         Matrix4f.rotate(cameraRotation.y, Y_AXIS.vector, viewMatrix, viewMatrix);
         Matrix4f.rotate(cameraRotation.z, Z_AXIS.vector, viewMatrix, viewMatrix);
+        return this;
     }
 	
     public void addRotation(float deltaX, float deltaY)

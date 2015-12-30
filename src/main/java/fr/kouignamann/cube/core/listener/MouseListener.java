@@ -1,10 +1,14 @@
 package fr.kouignamann.cube.core.listener;
 
-import fr.kouignamann.cube.core.*;
-import org.lwjgl.input.*;
-import org.slf4j.*;
+import java.util.Objects;
 
-import java.util.*;
+import org.lwjgl.input.Mouse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fr.kouignamann.cube.core.Constant;
+import fr.kouignamann.cube.core.CubeAppGraphics;
+import fr.kouignamann.cube.core.CubeAppLogics;
 
 public class MouseListener implements Runnable {
 
@@ -101,7 +105,7 @@ public class MouseListener implements Runnable {
     }
 
     private void leftSelectionClick() {
-//        CubeAppLogics.registerScreenClick(Mouse.getX(), Mouse.getY());
+        CubeAppLogics.registerScreenClick(Mouse.getX(), Mouse.getY());
     }
 
     private void leftRotationClick() {

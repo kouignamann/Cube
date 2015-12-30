@@ -1,16 +1,30 @@
 package fr.kouignamann.cube.core;
 
-import fr.kouignamann.cube.core.model.drawable.*;
-import fr.kouignamann.cube.core.model.drawable.shader.*;
-import fr.kouignamann.cube.core.model.gl.*;
-import fr.kouignamann.cube.core.utils.*;
-import org.lwjgl.*;
-import org.lwjgl.opengl.*;
-import org.slf4j.*;
-
-import java.util.*;
-
 import static fr.kouignamann.cube.core.Constant.*;
+
+import java.util.List;
+
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.ContextAttribs;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.PixelFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fr.kouignamann.cube.core.model.drawable.DrawableObject;
+import fr.kouignamann.cube.core.model.drawable.DrawableObjectPart;
+import fr.kouignamann.cube.core.model.drawable.shader.ShaderObject;
+import fr.kouignamann.cube.core.model.drawable.shader.SimpleCubeShader;
+import fr.kouignamann.cube.core.model.gl.Camera;
+import fr.kouignamann.cube.core.model.gl.Vertex;
+import fr.kouignamann.cube.core.utils.GlUtils;
+import fr.kouignamann.cube.core.utils.TextureUtils;
 
 public class CubeAppGraphics {
 
@@ -38,7 +52,7 @@ public class CubeAppGraphics {
         graphics = new CubeAppGraphics();
         CubeAppGraphics.checkCtx();
         CubeAppGraphics.setupOpenGL();
-        graphics.cubaAppShader = new ShaderObject();
+        graphics.cubaAppShader = new SimpleCubeShader();
         graphics.cubeAppCamera = new Camera();
         graphics.textureIds = new int[] {
                 TextureUtils.loadTexture("/textures/glass.png"),
@@ -74,29 +88,25 @@ public class CubeAppGraphics {
             System.exit(-1);
         }
 
-        GL11.glClearColor(BLUE[0], BLUE[1], BLUE[2], BLUE[3]);
+        GL11.glClearColor(BLACK[0], BLACK[1], BLACK[2], BLACK[3]);
         GL11.glClearStencil(0);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_STENCIL_TEST);
-        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
         GL11.glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
     public static void draw() {
         checkCtx();
-        graphics.cubeAppCamera.compute();
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_STENCIL_BUFFER_BIT);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL20.glUseProgram(graphics.cubaAppShader.getShaderProgramId());
-        graphics.cubaAppShader.pushUniforms(graphics.cubeAppCamera);
+        graphics.cubaAppShader.pushUniforms(graphics.cubeAppCamera.compute());
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, graphics.textureIds[graphics.textureIdsArrayIndex]);
 
         List<DrawableObject> drawables = CubeAppLogics.getDrawables();
         for (int i=0; i < drawables.size(); i++) {
-            GL11.glStencilFunc(GL11.GL_ALWAYS, i+1, -1);
             DrawableObject drawableObject = drawables.get(i);
             GL30.glBindVertexArray(drawableObject.getVaoId());
             GL20.glEnableVertexAttribArray(0);
@@ -113,18 +123,11 @@ public class CubeAppGraphics {
                         drawableObjectPart.getStartIndex()*Vertex.ELEMENT_BYTES);
             }
         }
-//        for (DrawableObject drawable : drawables) {
-//            GL30.glBindVertexArray(drawable.getVaoId());
-//            GL20.glEnableVertexAttribArray(0);
-//            GL20.glEnableVertexAttribArray(1);
-//            GL20.glEnableVertexAttribArray(2);
-//            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, drawable.getVboiId());
-//            GL11.glDrawElements(GL11.GL_TRIANGLES, drawable.getNbIndices(), GL11.GL_UNSIGNED_INT, 0);
-//        }
 
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL20.glDisableVertexAttribArray(2);
+        GL20.glDisableVertexAttribArray(3);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
         GL30.glBindVertexArray(0);
         GL20.glUseProgram(0);

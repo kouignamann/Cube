@@ -1,16 +1,26 @@
 package fr.kouignamann.cube.core;
 
-import fr.kouignamann.cube.core.builder.*;
-import fr.kouignamann.cube.core.model.drawable.*;
-import fr.kouignamann.cube.core.model.gl.*;
-import org.lwjgl.*;
-import org.lwjgl.opengl.*;
-import org.lwjgl.util.glu.*;
-import org.lwjgl.util.vector.*;
-import org.slf4j.*;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.nio.*;
-import java.util.*;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.vector.Vector3f;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fr.kouignamann.cube.core.builder.CubeBuilder;
+import fr.kouignamann.cube.core.model.drawable.DrawableObject;
+import fr.kouignamann.cube.core.model.drawable.DrawableObjectPart;
+import fr.kouignamann.cube.core.model.drawable.shader.SelectionCubeShader;
+import fr.kouignamann.cube.core.model.drawable.shader.ShaderObject;
+import fr.kouignamann.cube.core.model.gl.SelectionColor;
+import fr.kouignamann.cube.core.model.gl.Vertex;
 
 public class CubeAppLogics {
 
@@ -19,6 +29,8 @@ public class CubeAppLogics {
     private static CubeAppLogics logics;
 
     private List<DrawableObject> dObjects;
+
+    private ShaderObject selectionShader;
 
     private int xClicked = -1;
     private int yClicked = -1;
@@ -39,6 +51,7 @@ public class CubeAppLogics {
         logics = new CubeAppLogics();
 
         logics.dObjects.add(CubeBuilder.build3x3x3Cubes());
+        logics.selectionShader = new SelectionCubeShader();
     }
 
     private static void checkCtx() {
@@ -50,6 +63,7 @@ public class CubeAppLogics {
     public static void destroyLogics() {
         checkCtx();
         logics.dObjects.stream().forEach(DrawableObject::destroy);
+        logics.selectionShader.destroy();
         logics = null;
     }
 
@@ -68,31 +82,49 @@ public class CubeAppLogics {
 
     private static void printClickCoord() {
         checkCtx();
-        //TODO not trustable (& beware of synchronized methods)
         if (Constant.CLICK_MS_COOLDOWN + logics.lastClick < System.currentTimeMillis()) {
             logics.lastClick = System.currentTimeMillis();
-            Camera camera = CubeAppGraphics.getCamera();
-            camera.compute();
-            logger.info(String.format("Clicked at (%d | %d) - mouse coord", logics.xClicked, logics.yClicked));
 
-            FloatBuffer modelBuffer = BufferUtils.createFloatBuffer(16);
-            FloatBuffer projectionBuffer = BufferUtils.createFloatBuffer(16);
+            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL20.glUseProgram(logics.selectionShader.getShaderProgramId());
+            logics.selectionShader.pushUniforms(CubeAppGraphics.getCamera().compute());
+            for (int i=0; i < logics.dObjects.size(); i++) {
+                DrawableObject drawableObject = logics.dObjects.get(i);
+                GL30.glBindVertexArray(drawableObject.getVaoId());
+                GL20.glEnableVertexAttribArray(0);
+                GL20.glEnableVertexAttribArray(2);
+                GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, drawableObject.getVboiId());
+                for (DrawableObjectPart drawableObjectPart : drawableObject.getParts()) {
+                    GL11.glDrawElements(
+                            GL11.GL_TRIANGLES,
+                            drawableObjectPart.getLength(),
+                            GL11.GL_UNSIGNED_INT,
+                            drawableObjectPart.getStartIndex()* Vertex.ELEMENT_BYTES);
+                }
+            }
+            GL20.glDisableVertexAttribArray(0);
+            GL20.glDisableVertexAttribArray(2);
+            GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+            GL30.glBindVertexArray(0);
+            GL20.glUseProgram(0);
+
+            FloatBuffer pixelBuffer = BufferUtils.createFloatBuffer(4);
             IntBuffer viewBuffer = BufferUtils.createIntBuffer(16);
-            camera.getModelMatrix().store(modelBuffer);
-            camera.getProjectionMatrix().store(projectionBuffer);
-            modelBuffer.rewind();
-            projectionBuffer.rewind();
-
             GL11.glGetInteger(GL11.GL_VIEWPORT, viewBuffer);
-            viewBuffer.rewind();
-            FloatBuffer pos = BufferUtils.createFloatBuffer(16);
-            FloatBuffer z = BufferUtils.createFloatBuffer(1);
-            GL11.glReadPixels(logics.xClicked, logics.yClicked, 1, 1, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, z);
+            GL11.glReadPixels(logics.xClicked, logics.yClicked, 1, 1, GL11.GL_RGBA, GL11.GL_FLOAT, pixelBuffer);
 
-            logger.info("z from depth buffer : " + z.get(0));
-
-            GLU.gluUnProject(logics.xClicked, logics.yClicked, z.get(0), modelBuffer, projectionBuffer, viewBuffer, pos);
-            logger.info(String.format("Clicked at (%f | %f | %f | %f) - position vect", pos.get(0), pos.get(1), pos.get(2), pos.get(3)));
+            SelectionColor selectedColor = SelectionColor.fromFloatBuffer(pixelBuffer);
+            DrawableObjectPart selectedPart = null;
+            drawableLoop : for (DrawableObject drawableObject : logics.dObjects) {
+                drawablePartLoop : for (DrawableObjectPart drawableObjectPart : drawableObject.getParts()) {
+                    if (drawableObjectPart.getSelectionColor().rgbEquals(selectedColor)) {
+                        selectedPart = drawableObjectPart;
+                        break drawableLoop;
+                    }
+                }
+            }
+            logger.info(String.format("Selected part vertice : startIndex = %d, length = %d", selectedPart.getStartVertexIndex(), selectedPart.getNbVertex()));
         }
         logics.xClicked = -1;
         logics.yClicked = -1;

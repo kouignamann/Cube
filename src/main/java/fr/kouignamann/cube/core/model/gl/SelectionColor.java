@@ -1,6 +1,6 @@
 package fr.kouignamann.cube.core.model.gl;
 
-import java.util.*;
+import java.nio.FloatBuffer;
 
 public class SelectionColor {
 
@@ -20,14 +20,25 @@ public class SelectionColor {
         this.color = new float[] {r, g, b, 1f};
     }
 
+    private SelectionColor(FloatBuffer floatBuffer) {
+        super();
+        this.color = new float[4];
+        floatBuffer.get(this.color);
+    }
+
     public float[] getColor() {
         return color;
     }
 
-    public boolean equals(SelectionColor otherSelectionColor) {
-        return Objects.equals(color[0], otherSelectionColor.color[0])
-                && Objects.equals(color[1], otherSelectionColor.color[1])
-                && Objects.equals(color[2], otherSelectionColor.color[2]);
+    public boolean rgbEquals(SelectionColor otherSelectionColor) {
+//        long colorAsLong = ((Float) (color[0] + (color[0]*256) + color[2]*65536) / COLOR_STEP));
+
+        return Float.compare(color[0], otherSelectionColor.color[0]) == 0
+                && Float.compare(color[1], otherSelectionColor.color[1]) == 0
+                && Float.compare(color[2], otherSelectionColor.color[2]) == 0;
+//        return Objects.equals(color[0], otherSelectionColor.color[0])
+//                && Objects.equals(color[1], otherSelectionColor.color[1])
+//                && Objects.equals(color[2], otherSelectionColor.color[2]);
     }
 
     @Override
@@ -43,5 +54,9 @@ public class SelectionColor {
         }
 
         return new SelectionColor(lastSelectionColor);
+    }
+
+    public static SelectionColor fromFloatBuffer(FloatBuffer floatBuffer) {
+        return new SelectionColor(floatBuffer);
     }
 }
