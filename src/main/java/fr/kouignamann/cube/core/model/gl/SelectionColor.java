@@ -1,56 +1,65 @@
 package fr.kouignamann.cube.core.model.gl;
 
-import java.nio.FloatBuffer;
+import java.nio.*;
 
 public class SelectionColor {
 
+    public static SelectionColor NOTHING = new SelectionColor(0l);
+
     private static final int MAX_COLOR_AS_INT = 16777214; // 2^24 - 2
 
-    private static final float COLOR_STEP = 1f / 255f;
+    private static final float MAX_COLOR_TONE_VALUE = 255f;
+
+    private static final float GL_COLOR_STEP = 1f / MAX_COLOR_TONE_VALUE;
 
     private static long lastSelectionColor = 0l;
 
-    private float[] color;
+    private float[] colorRGBA;
 
-    private SelectionColor(Long colorAsInt) {
+    private long longColorRGB;
+
+    private SelectionColor(long longColorRGB) {
         super();
-        float r = colorAsInt%256 * COLOR_STEP;
-        float g = (colorAsInt/256)%256 * COLOR_STEP;
-        float b = (colorAsInt/65536)%256 * COLOR_STEP;
-        this.color = new float[] {r, g, b, 1f};
+        this.longColorRGB = longColorRGB;
+        float r = longColorRGB%256 * GL_COLOR_STEP;
+        float g = (longColorRGB/256)%256 * GL_COLOR_STEP;
+        float b = (longColorRGB/65536)%256 * GL_COLOR_STEP;
+        this.colorRGBA = new float[] {r, g, b, 1f};
     }
 
     private SelectionColor(FloatBuffer floatBuffer) {
         super();
-        this.color = new float[4];
-        floatBuffer.get(this.color);
+        this.colorRGBA = new float[4];
+        floatBuffer.get(this.colorRGBA);
+        long r = new Float(colorRGBA[0] * MAX_COLOR_TONE_VALUE).longValue();
+        long g = new Float(colorRGBA[1] * MAX_COLOR_TONE_VALUE).longValue();
+        long b = new Float(colorRGBA[2] * MAX_COLOR_TONE_VALUE).longValue();
+        this.longColorRGB = r + g*256 + b*65536;
     }
 
-    public float[] getColor() {
-        return color;
+    public float[] getColorRGBA() {
+        return colorRGBA;
     }
 
-    public boolean rgbEquals(SelectionColor otherSelectionColor) {
-//        long colorAsLong = ((Float) (color[0] + (color[0]*256) + color[2]*65536) / COLOR_STEP));
+    public boolean nothingSelected() {
+        return NOTHING.equalsRGB(this);
+    }
 
-        return Float.compare(color[0], otherSelectionColor.color[0]) == 0
-                && Float.compare(color[1], otherSelectionColor.color[1]) == 0
-                && Float.compare(color[2], otherSelectionColor.color[2]) == 0;
-//        return Objects.equals(color[0], otherSelectionColor.color[0])
-//                && Objects.equals(color[1], otherSelectionColor.color[1])
-//                && Objects.equals(color[2], otherSelectionColor.color[2]);
+    public boolean equalsRGB(SelectionColor otherColor) {
+        return longColorRGB == otherColor.longColorRGB;
     }
 
     @Override
     public String toString() {
-        return String.format("{RGBA : %f / %f / %f / %f}", color[0], color[1], color[2], color[3]);
+        return String.format("{RGBA : %f / %f / %f / %f - long RGB : %d}",
+                colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3], longColorRGB);
     }
 
     public static SelectionColor getNextSelectionColor() {
         lastSelectionColor++;
 
         if (lastSelectionColor > MAX_COLOR_AS_INT) {
-            throw new IllegalStateException("Max picking color overstepped");
+            throw new IllegalStateException("Max picking colorRGBA overstepped");
         }
 
         return new SelectionColor(lastSelectionColor);

@@ -30,6 +30,7 @@ public class DrawableObject {
 			this.parts = new ArrayList<>();
 			this.parts.add(new DrawableObjectPart(0, nbIndices));
 		}
+		parts.stream().forEach(p -> p.parent = this);
 	}
 	
 	public void destroy() {

@@ -2,7 +2,6 @@ package fr.kouignamann.cube.core.builder;
 
 import fr.kouignamann.cube.core.model.drawable.*;
 import fr.kouignamann.cube.core.model.gl.*;
-import fr.kouignamann.cube.core.utils.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.*;
@@ -12,14 +11,13 @@ import java.nio.*;
 import java.util.*;
 
 import static fr.kouignamann.cube.core.Constant.*;
-import static fr.kouignamann.cube.core.utils.MathUtils.RotationAxis.*;
 
 public class CubeBuilder extends DrawableObjectBuilder {
 
     private final static Logger logger = LoggerFactory.getLogger(CubeBuilder.class);
 
     private final static float FACE_WIDTH = 100f;
-    private final static float FACE_MARGIN = 1f;
+    private final static float FACE_MARGIN = 1;
     private final static float FACE_REAL_WIDTH = FACE_WIDTH - FACE_MARGIN;
     private final static float CUBE_UNIT = FACE_REAL_WIDTH / 2.0f;
 
@@ -73,20 +71,17 @@ public class CubeBuilder extends DrawableObjectBuilder {
         );
     }
 
-    public static void changeDrawableGeometry(DrawableObject drawableObject, float scale, Vector3f angle) {
+    public static void changeDrawableGeometry(DrawableObject drawableObject) {
         FloatBuffer verticeBuffer = drawableObject.getVerticeBuffer();
         FloatBuffer newVerticeBuffer = BufferUtils.createFloatBuffer(verticeBuffer.limit());
 
-        float realScale = 0.5f-(scale/200f);
-
-        float[] xRotationMatrix = MathUtils.computeRotationAnimationMatrix(angle, X_AXIS);
-        float[] yRotationMatrix = MathUtils.computeRotationAnimationMatrix(angle, Y_AXIS);
-        float[] zRotationMatrix = MathUtils.computeRotationAnimationMatrix(angle, Z_AXIS);
-
         List<Vertex> vertice = new ArrayList<>();
         Map<CubAppVector4f, CubAppVector4f> positionsMap = new HashMap<>();
-        while (verticeBuffer.hasRemaining()) {
+        Iterator<DrawableObjectPart> drawableObjectPartIterator = drawableObject.getParts().iterator();
+        DrawableObjectPart part = null;
+        while (verticeBuffer.hasRemaining() && drawableObjectPartIterator.hasNext()) {
             // One pass per cube
+            part = drawableObjectPartIterator.next();
             int i = NB_VERTEX_PER_CUBE;
             while (i > 0) {
                 Vertex vertex = Vertex.readVertex(verticeBuffer);
@@ -112,13 +107,13 @@ public class CubeBuilder extends DrawableObjectBuilder {
                 CubAppVector4f vector2 = orderedPositionsToChange.get(index++);
 
                 // Translation
-                Vector4f translationVector = (Vector4f) Vector4f.sub(vector1, vector2, null).scale(realScale);
+                Vector4f translationVector = (Vector4f) Vector4f.sub(vector1, vector2, null).scale(part.getRealScale());
                 Vector4f.sub(vector1, translationVector, vector1);
                 Vector4f.add(vector2, translationVector, vector2);
 
                 // Rotations
-                vector1.rotate(rotationCenter, xRotationMatrix, yRotationMatrix, zRotationMatrix);
-                vector2.rotate(rotationCenter, xRotationMatrix, yRotationMatrix, zRotationMatrix);
+                vector1.rotate(rotationCenter, part.getxRotationMatrix(), part.getyRotationMatrix(), part.getzRotationMatrix());
+                vector2.rotate(rotationCenter, part.getxRotationMatrix(), part.getyRotationMatrix(), part.getzRotationMatrix());
             }
 
             for (Vertex vertex : vertice) {
@@ -187,7 +182,7 @@ public class CubeBuilder extends DrawableObjectBuilder {
         }
         for (DrawableObjectPart part : cubes) {
             for (int i = part.getStartVertexIndex(); i<=part.getLastVertexIndex(); i++) {
-                cubeVertices.get(i).setSelectColor(part.getSelectionColor().getColor());
+                cubeVertices.get(i).setSelectColor(part.getSelectionColor().getColorRGBA());
             }
         }
 
