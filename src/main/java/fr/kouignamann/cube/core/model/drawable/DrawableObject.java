@@ -1,5 +1,6 @@
 package fr.kouignamann.cube.core.model.drawable;
 
+import fr.kouignamann.cube.core.model.gl.*;
 import org.lwjgl.opengl.*;
 
 import java.nio.*;
@@ -25,6 +26,10 @@ public class DrawableObject {
 		this.nbIndices = nbIndices;
 		this.verticeBuffer = verticeBuffer;
 		this.parts = parts;
+		if (this.parts == null) {
+			this.parts = new ArrayList<>();
+			this.parts.add(new DrawableObjectPart(0, nbIndices));
+		}
 	}
 	
 	public void destroy() {
@@ -35,6 +40,26 @@ public class DrawableObject {
 		GL15.glDeleteBuffers(vboiId);
         GL30.glBindVertexArray(0);
         GL30.glDeleteVertexArrays(vaoId);
+	}
+
+	public DrawableObjectPart findDrawableObjectPartByVertexIndex(int index) {
+		for (DrawableObjectPart part : parts) {
+			if (index>=part.getStartIndex() && index<=part.getLastIndex()) {
+				return part;
+			}
+		}
+		throw new IllegalStateException(
+				String.format("Drawable object part not found (by index) : size = %d, index = %d", nbIndices, index));
+	}
+
+	public DrawableObjectPart findDrawableObjectPartBySelectionColor(SelectionColor selectionColor) {
+		for (DrawableObjectPart part : parts) {
+			if (part.getSelectionColor().equals(selectionColor)) {
+				return part;
+			}
+		}
+		throw new IllegalStateException(
+				String.format("Drawable object part not found (by selection color) : color = %s", selectionColor));
 	}
 	
 	public int getVaoId() {

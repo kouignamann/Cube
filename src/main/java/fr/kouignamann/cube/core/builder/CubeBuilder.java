@@ -23,11 +23,21 @@ public class CubeBuilder extends DrawableObjectBuilder {
     private final static float FACE_REAL_WIDTH = FACE_WIDTH - FACE_MARGIN;
     private final static float CUBE_UNIT = FACE_REAL_WIDTH / 2.0f;
 
-    private final static int[] FACE_INDICES = {
-            0,	1,	2,
-            2,	3,	0
+    private final static int[] CUBE_INDICES = {
+            0,	1,	2,  // FRONT FACE
+            2,	3,	0,  // FRONT FACE
+            4,	5,	6,  // RIGHT FACE
+            6,	7,	4,  // RIGHT FACE
+            8,	9,	10, // BACK FACE
+            10,	11,	8,  // BACK FACE
+            12,	13,	14, // LEFT FACE
+            14,	15,	12, // LEFT FACE
+            16,	17,	18, // TOP FACE
+            18,	19,	16, // TOP FACE
+            20,	21,	22, // BOTTOM FACE
+            22,	23,	20  // BOTTOM FACE
     };
-    private final static int NB_VERTICE_PER_CUBE = 24;
+    private final static int NB_VERTEX_PER_CUBE = 24;
 
     private static List<Vertex> getCubeVectors(int abs, int ord, int z) {
         return Arrays.asList(
@@ -77,7 +87,7 @@ public class CubeBuilder extends DrawableObjectBuilder {
         Map<CubAppVector4f, CubAppVector4f> positionsMap = new HashMap<>();
         while (verticeBuffer.hasRemaining()) {
             // One pass per cube
-            int i = NB_VERTICE_PER_CUBE;
+            int i = NB_VERTEX_PER_CUBE;
             while (i > 0) {
                 Vertex vertex = Vertex.readVertex(verticeBuffer);
                 CubAppVector4f position = new CubAppVector4f(vertex);
@@ -134,14 +144,14 @@ public class CubeBuilder extends DrawableObjectBuilder {
         List<Vertex> faceVertices = getCubeVectors(0, 0, 0);
         faceVertices.stream().forEach(v -> v.setColor(RED));
         FloatBuffer verticesBuffer = buildVerticeBuffer(faceVertices);
-        IntBuffer indicesBuffer = buildIndicesBuffer(FACE_INDICES, 6);
+        IntBuffer indicesBuffer = buildIndicesBuffer(CUBE_INDICES, 1);
         return buildDrawableObject(verticesBuffer, indicesBuffer, null);
     }
 
     public static DrawableObject build3x3x3Cubes() {
         logger.info("Building 3 x 3 x 3 cubes");
         List<Vertex> cubeVertices = new ArrayList<>();
-        List<DrawableObjectPart> cubeParts = new ArrayList<>();
+        List<DrawableObjectPart> cubes = new ArrayList<>();
         cubeVertices.addAll(getCubeVectors(-1, 1, 1));
         cubeVertices.addAll(getCubeVectors(0, 1, 1));
         cubeVertices.addAll(getCubeVectors(1, 1, 1));
@@ -170,13 +180,20 @@ public class CubeBuilder extends DrawableObjectBuilder {
         cubeVertices.addAll(getCubeVectors(0, -1, -1));
         cubeVertices.addAll(getCubeVectors(1, -1, -1));
         cubeVertices.stream().forEach(v -> v.setColor(RED));
-        FloatBuffer verticesBuffer = buildVerticeBuffer(cubeVertices);
-        IntBuffer indicesBuffer = buildIndicesBuffer(FACE_INDICES, 6 * 27);
 
-        int nbIndicesPerCube = FACE_INDICES.length;
-        for (int i = 0; i < cubeVertices.size(); i++) {
-            cubeParts.add(new DrawableObjectPart(i*nbIndicesPerCube, nbIndicesPerCube));
+        int nbIndicesPerCube = CUBE_INDICES.length;
+        for (int i = 0; i < 27; i++) {
+            cubes.add(new DrawableObjectPart(i * nbIndicesPerCube, nbIndicesPerCube));
         }
-        return buildDrawableObject(verticesBuffer, indicesBuffer, cubeParts);
+        for (DrawableObjectPart part : cubes) {
+            for (int i = part.getStartVertexIndex(); i<=part.getLastVertexIndex(); i++) {
+                cubeVertices.get(i).setSelectColor(part.getSelectionColor().getColor());
+            }
+        }
+
+        FloatBuffer verticesBuffer = buildVerticeBuffer(cubeVertices);
+        IntBuffer indicesBuffer = buildIndicesBuffer(CUBE_INDICES, 27);
+
+        return buildDrawableObject(verticesBuffer, indicesBuffer, cubes);
     }
 }
