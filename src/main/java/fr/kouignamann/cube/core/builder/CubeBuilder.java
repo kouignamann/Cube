@@ -1,27 +1,17 @@
 package fr.kouignamann.cube.core.builder;
 
+import fr.kouignamann.cube.core.*;
+import fr.kouignamann.cube.core.model.drawable.*;
+import fr.kouignamann.cube.core.model.gl.*;
+import org.lwjgl.*;
+import org.lwjgl.opengl.*;
+import org.lwjgl.util.vector.*;
+import org.slf4j.*;
+
+import java.nio.*;
+import java.util.*;
+
 import static fr.kouignamann.cube.core.Constant.*;
-
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.util.vector.Vector4f;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import fr.kouignamann.cube.core.CubeAppTextures;
-import fr.kouignamann.cube.core.model.drawable.DrawableObject;
-import fr.kouignamann.cube.core.model.drawable.DrawableObjectPart;
-import fr.kouignamann.cube.core.model.gl.CubAppVector4f;
-import fr.kouignamann.cube.core.model.gl.Vertex;
 
 public class CubeBuilder extends DrawableObjectBuilder {
 
@@ -89,7 +79,7 @@ public class CubeBuilder extends DrawableObjectBuilder {
         List<Vertex> vertice = new ArrayList<>();
         Map<CubAppVector4f, CubAppVector4f> positionsMap = new HashMap<>();
         Iterator<DrawableObjectPart> drawableObjectPartIterator = drawableObject.getParts().iterator();
-        DrawableObjectPart part = null;
+        DrawableObjectPart part;
         while (verticeBuffer.hasRemaining() && drawableObjectPartIterator.hasNext()) {
             // One pass per cube
             part = drawableObjectPartIterator.next();
@@ -151,7 +141,7 @@ public class CubeBuilder extends DrawableObjectBuilder {
         faceVertices.stream().forEach(v -> v.setColor(RED));
         FloatBuffer verticesBuffer = buildVerticeBuffer(faceVertices);
         IntBuffer indicesBuffer = buildIndicesBuffer(CUBE_INDICES, 1);
-        return buildDrawableObject(verticesBuffer, indicesBuffer, null, CubeAppTextures.CUBE_TEXTURE_NAME);
+        return buildDrawableObject(verticesBuffer, indicesBuffer, newSingleDrawableObjectPartAsList(CUBE_INDICES.length, true), CubeAppTextures.CUBE_TEXTURE_NAME, CubeBuilder::changeDrawableGeometry);
     }
 
     public static DrawableObject build3x3x3Cubes() {
@@ -189,7 +179,7 @@ public class CubeBuilder extends DrawableObjectBuilder {
 
         int nbIndicesPerCube = CUBE_INDICES.length;
         for (int i = 0; i < 27; i++) {
-            cubes.add(new DrawableObjectPart(i * nbIndicesPerCube, nbIndicesPerCube));
+            cubes.add(new DrawableObjectPart(i * nbIndicesPerCube, nbIndicesPerCube, true));
         }
         for (DrawableObjectPart part : cubes) {
             for (int i = part.getStartVertexIndex(); i<=part.getLastVertexIndex(); i++) {
@@ -200,6 +190,6 @@ public class CubeBuilder extends DrawableObjectBuilder {
         FloatBuffer verticesBuffer = buildVerticeBuffer(cubeVertices);
         IntBuffer indicesBuffer = buildIndicesBuffer(CUBE_INDICES, 27);
 
-        return buildDrawableObject(verticesBuffer, indicesBuffer, cubes, CubeAppTextures.CUBE_TEXTURE_NAME);
+        return buildDrawableObject(verticesBuffer, indicesBuffer, cubes, CubeAppTextures.CUBE_TEXTURE_NAME, CubeBuilder::changeDrawableGeometry);
     }
 }

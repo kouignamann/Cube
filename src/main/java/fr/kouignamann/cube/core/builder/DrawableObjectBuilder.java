@@ -1,22 +1,15 @@
 package fr.kouignamann.cube.core.builder;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import fr.kouignamann.cube.core.*;
+import fr.kouignamann.cube.core.model.drawable.*;
+import fr.kouignamann.cube.core.model.gl.*;
+import fr.kouignamann.cube.core.utils.*;
+import org.lwjgl.*;
+import org.lwjgl.opengl.*;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
-
-import fr.kouignamann.cube.core.CubeAppTextures;
-import fr.kouignamann.cube.core.model.drawable.DrawableObject;
-import fr.kouignamann.cube.core.model.drawable.DrawableObjectPart;
-import fr.kouignamann.cube.core.model.gl.Vertex;
-import fr.kouignamann.cube.core.utils.GlUtils;
+import java.nio.*;
+import java.util.*;
+import java.util.function.*;
 
 public abstract class DrawableObjectBuilder {
 
@@ -34,21 +27,22 @@ public abstract class DrawableObjectBuilder {
         IntBuffer indicesBuffer = BufferUtils.createIntBuffer(indices.length * nbObjects);
         for (int objectOffset = 0; objectOffset < nbObjects; objectOffset++) {
             int offset = objectOffset*nbVertex;
-            for (int index = 0; index < indices.length; index++) {
-                indicesBuffer.put(indices[index] + offset);
+            for (int index : indices) {
+                indicesBuffer.put(index + offset);
             }
         }
         indicesBuffer.flip();
         return indicesBuffer;
     }
 
-    protected static List<DrawableObjectPart> newSingleDrawableObjectPartAsList(int length) {
+    protected static List<DrawableObjectPart> newSingleDrawableObjectPartAsList(int length, boolean selectable) {
         List<DrawableObjectPart> results = new ArrayList<>();
-        results.add(new DrawableObjectPart(0, length));
+        results.add(new DrawableObjectPart(0, length, selectable));
         return results;
     }
 
-    protected static DrawableObject buildDrawableObject(FloatBuffer verticesBuffer, IntBuffer indicesBuffer, List<DrawableObjectPart> parts, String textureName) {
+    protected static DrawableObject buildDrawableObject(FloatBuffer verticesBuffer, IntBuffer indicesBuffer, List<DrawableObjectPart> parts,
+                                                        String textureName, Consumer<DrawableObject> geometryBuilder) {
         int vaoId = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vaoId);
         int vboId = GL15.glGenBuffers();
@@ -70,6 +64,6 @@ public abstract class DrawableObjectBuilder {
 
         GlUtils.exitOnGLError("Failed drawable object build");
 
-        return new DrawableObject(vaoId, vboId, vboiId, indicesBuffer.limit(), textureId, verticesBuffer, parts);
+        return new DrawableObject(vaoId, vboId, vboiId, indicesBuffer.limit(), textureId, verticesBuffer, parts, geometryBuilder);
     }
 }

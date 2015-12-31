@@ -1,15 +1,12 @@
 package fr.kouignamann.cube.core.model.drawable;
 
+import fr.kouignamann.cube.core.model.gl.*;
+import fr.kouignamann.cube.core.utils.*;
+import org.lwjgl.util.vector.*;
+
+import java.util.*;
+
 import static fr.kouignamann.cube.core.utils.MathUtils.RotationAxis.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.util.vector.Vector3f;
-
-import fr.kouignamann.cube.core.model.gl.SelectionColor;
-import fr.kouignamann.cube.core.model.gl.Vertex;
-import fr.kouignamann.cube.core.utils.MathUtils;
 
 public class DrawableObjectPart {
 
@@ -25,12 +22,12 @@ public class DrawableObjectPart {
     private int startVertexIndex;
     private int nbElmements;
 
-    public DrawableObjectPart(int startIndex, int length) {
+    public DrawableObjectPart(int startIndex, int length, boolean selectable) {
         this.startIndex = startIndex;
         this.length = length;
         this.nbVertex = 4*length/6;
         this.startVertexIndex = 4*startIndex/6;
-        this.selectionColor = SelectionColor.getNextSelectionColor();
+        this.selectionColor = selectable ? SelectionColor.getNextSelectionColor() : SelectionColor.NOTHING;
         this.nbElmements = nbVertex*Vertex.ELEMENT_COUNT;
     }
 

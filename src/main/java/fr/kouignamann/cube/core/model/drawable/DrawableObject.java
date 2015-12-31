@@ -1,13 +1,11 @@
 package fr.kouignamann.cube.core.model.drawable;
 
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.List;
+import fr.kouignamann.cube.core.model.gl.*;
+import org.lwjgl.opengl.*;
 
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL30;
-
-import fr.kouignamann.cube.core.model.gl.SelectionColor;
+import java.nio.*;
+import java.util.*;
+import java.util.function.*;
 
 public class DrawableObject {
 	
@@ -21,9 +19,12 @@ public class DrawableObject {
 	private List<DrawableObjectPart> parts;
 
 	private int textureId;
+
+	private Consumer<DrawableObject> geometryComputer;
 	
 	public DrawableObject(int vaoId, int vboId, int vboiId, int nbIndices, int textureId,
-						  FloatBuffer verticeBuffer, List<DrawableObjectPart> parts) {
+						  FloatBuffer verticeBuffer, List<DrawableObjectPart> parts,
+						  Consumer<DrawableObject> geometryComputer) {
 		super();
 		this.vaoId = vaoId;
 		this.vboId = vboId;
@@ -34,9 +35,10 @@ public class DrawableObject {
 		this.parts = parts;
 		if (this.parts == null) {
 			this.parts = new ArrayList<>();
-			this.parts.add(new DrawableObjectPart(0, nbIndices));
+			this.parts.add(new DrawableObjectPart(0, nbIndices, false));
 		}
 		parts.stream().forEach(p -> p.parent = this);
+		this.geometryComputer = geometryComputer;
 	}
 	
 	public void destroy() {
@@ -67,6 +69,12 @@ public class DrawableObject {
 		}
 		throw new IllegalStateException(
 				String.format("Drawable object part not found (by selection color) : color = %s", selectionColor));
+	}
+
+	public void computeGeometry() {
+		if (this.geometryComputer != null) {
+			geometryComputer.accept(this);
+		}
 	}
 	
 	public int getVaoId() {

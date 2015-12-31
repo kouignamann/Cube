@@ -37,6 +37,7 @@ public class CubeAppLogics {
         logics = new CubeAppLogics();
 
         logics.dObjects.add(CubeBuilder.build3x3x3Cubes());
+        logics.dObjects.add(QuadBuilder.buildGround());
         logics.selectionShader = new SelectionCubeShader();
     }
 
@@ -58,7 +59,7 @@ public class CubeAppLogics {
         if (logics.xSelectionClick >=0) {
             findClickedDrawanbleObjectPart();
         }
-        logics.dObjects.stream().forEach(CubeBuilder::changeDrawableGeometry);
+        logics.dObjects.stream().forEach(DrawableObject::computeGeometry);
     }
 
     private static void findClickedDrawanbleObjectPart() {
