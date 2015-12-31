@@ -1,8 +1,11 @@
 package fr.kouignamann.cube.core.listener;
 
-import fr.kouignamann.cube.core.*;
-import org.lwjgl.input.*;
-import org.slf4j.*;
+import org.lwjgl.input.Keyboard;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fr.kouignamann.cube.core.Constant;
+import fr.kouignamann.cube.core.CubeAppLogics;
 
 public class KeyBoardListener implements Runnable {
 
@@ -30,16 +33,6 @@ public class KeyBoardListener implements Runnable {
 	}
 
 	private void listen() {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			CubeAppGraphics.previousTexture();
-			keyhitOnCooldown = true;
-			return;
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-			CubeAppGraphics.nextTexture();
-			keyhitOnCooldown = true;
-			return;
-		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_ADD)) {
 			CubeAppLogics.registerCubeScale(true);
 			keyhitOnCooldown = true;

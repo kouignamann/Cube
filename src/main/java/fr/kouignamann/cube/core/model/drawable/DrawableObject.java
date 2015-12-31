@@ -1,10 +1,13 @@
 package fr.kouignamann.cube.core.model.drawable;
 
-import fr.kouignamann.cube.core.model.gl.*;
-import org.lwjgl.opengl.*;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.nio.*;
-import java.util.*;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL30;
+
+import fr.kouignamann.cube.core.model.gl.SelectionColor;
 
 public class DrawableObject {
 	
@@ -16,14 +19,17 @@ public class DrawableObject {
 	private FloatBuffer verticeBuffer;
 
 	private List<DrawableObjectPart> parts;
+
+	private int textureId;
 	
-	public DrawableObject(int vaoId, int vboId, int vboiId, int nbIndices,
+	public DrawableObject(int vaoId, int vboId, int vboiId, int nbIndices, int textureId,
 						  FloatBuffer verticeBuffer, List<DrawableObjectPart> parts) {
 		super();
 		this.vaoId = vaoId;
 		this.vboId = vboId;
 		this.vboiId = vboiId;
 		this.nbIndices = nbIndices;
+		this.textureId = textureId;
 		this.verticeBuffer = verticeBuffer;
 		this.parts = parts;
 		if (this.parts == null) {
@@ -74,6 +80,9 @@ public class DrawableObject {
 	}
 	public int getNbIndices() {
 		return nbIndices;
+	}
+	public int getTextureId() {
+		return textureId;
 	}
 	public FloatBuffer getVerticeBuffer() {
 		return verticeBuffer;

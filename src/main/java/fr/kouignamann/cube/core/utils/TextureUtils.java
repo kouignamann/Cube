@@ -6,13 +6,13 @@
 
 package fr.kouignamann.cube.core.utils;
 
+import java.io.IOException;
+import java.util.regex.Pattern;
+
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.regex.Pattern;
 
 public class TextureUtils {
 
@@ -45,12 +45,10 @@ public class TextureUtils {
 		}
 	}
 
-	public static void destroyTextures(int[] textureIds) {
-		if (textureIds == null) {
+	public static void destroyTexture(int textureId) {
+		if (textureId == 0) {
 			return;
 		}
-		for (int textureId : textureIds) {
-			GL11.glDeleteTextures(textureId);
-		}
+		GL11.glDeleteTextures(textureId);
 	}
 }

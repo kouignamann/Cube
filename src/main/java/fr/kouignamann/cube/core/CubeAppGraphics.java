@@ -24,7 +24,6 @@ import fr.kouignamann.cube.core.model.drawable.shader.SimpleCubeShader;
 import fr.kouignamann.cube.core.model.gl.Camera;
 import fr.kouignamann.cube.core.model.gl.Vertex;
 import fr.kouignamann.cube.core.utils.GlUtils;
-import fr.kouignamann.cube.core.utils.TextureUtils;
 
 public class CubeAppGraphics {
 
@@ -36,10 +35,6 @@ public class CubeAppGraphics {
 
     private Camera cubeAppCamera;
 
-    private int[] textureIds;
-
-    private int textureIdsArrayIndex;
-
     private CubeAppGraphics() {
         super();
     }
@@ -50,24 +45,15 @@ public class CubeAppGraphics {
             throw new IllegalStateException("CubeAppGraphics already initialized");
         }
         graphics = new CubeAppGraphics();
-        CubeAppGraphics.checkCtx();
         CubeAppGraphics.setupOpenGL();
         graphics.cubaAppShader = new SimpleCubeShader();
         graphics.cubeAppCamera = new Camera();
-        graphics.textureIds = new int[] {
-                TextureUtils.loadTexture("/textures/glass.png"),
-                TextureUtils.loadTexture("/textures/mask.png"),
-                TextureUtils.loadTexture("/textures/lol.png"),
-                TextureUtils.loadTexture("/textures/notSureIf.png")
-        };
-        graphics.textureIdsArrayIndex = 0;
     }
 
     public static void destroy() {
         logger.info("Destroying Graphics");
         checkCtx();
         graphics.cubaAppShader.destroy();
-        TextureUtils.destroyTextures(graphics.textureIds);
         GlUtils.exitOnGLError("CubeAppGraphics destruction failure");
         Display.destroy();
     }
@@ -103,11 +89,11 @@ public class CubeAppGraphics {
         graphics.cubaAppShader.pushUniforms(graphics.cubeAppCamera.compute());
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, graphics.textureIds[graphics.textureIdsArrayIndex]);
 
         List<DrawableObject> drawables = CubeAppLogics.getDrawables();
         for (int i=0; i < drawables.size(); i++) {
             DrawableObject drawableObject = drawables.get(i);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, drawableObject.getTextureId());
             GL30.glBindVertexArray(drawableObject.getVaoId());
             GL20.glEnableVertexAttribArray(0);
             GL20.glEnableVertexAttribArray(1);
@@ -131,16 +117,6 @@ public class CubeAppGraphics {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
         GL30.glBindVertexArray(0);
         GL20.glUseProgram(0);
-    }
-
-    public static void previousTexture() {
-        checkCtx();
-        graphics.textureIdsArrayIndex = (graphics.textureIdsArrayIndex - 1 + graphics.textureIds.length) % graphics.textureIds.length;
-    }
-
-    public static void nextTexture() {
-        checkCtx();
-        graphics.textureIdsArrayIndex = (graphics.textureIdsArrayIndex +1) % graphics.textureIds.length;
     }
 
     public static void addCameraMovement(float movement) {

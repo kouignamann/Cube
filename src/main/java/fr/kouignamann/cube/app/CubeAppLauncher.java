@@ -1,11 +1,16 @@
 package fr.kouignamann.cube.app;
 
-import fr.kouignamann.cube.core.*;
-import fr.kouignamann.cube.core.listener.*;
-import fr.kouignamann.cube.core.utils.*;
-import org.lwjgl.*;
-import org.lwjgl.opengl.*;
-import org.slf4j.*;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fr.kouignamann.cube.core.Constant;
+import fr.kouignamann.cube.core.CubeAppGraphics;
+import fr.kouignamann.cube.core.CubeAppLogics;
+import fr.kouignamann.cube.core.CubeAppTextures;
+import fr.kouignamann.cube.core.listener.CubeAppListeners;
+import fr.kouignamann.cube.core.utils.GlUtils;
 
 public class CubeAppLauncher {
 
@@ -15,6 +20,7 @@ public class CubeAppLauncher {
 
         GlUtils.initLwjglLibs();
         CubeAppGraphics.setup();
+        CubeAppTextures.setup();
         CubeAppLogics.initLogics();
 
         CubeAppListeners.startListeners();
@@ -28,6 +34,7 @@ public class CubeAppLauncher {
 
         CubeAppListeners.stopListeners();
         CubeAppLogics.destroyLogics();
+        CubeAppTextures.destroy();
         CubeAppGraphics.destroy();
     }
 

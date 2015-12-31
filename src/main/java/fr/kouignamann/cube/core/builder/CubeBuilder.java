@@ -1,16 +1,27 @@
 package fr.kouignamann.cube.core.builder;
 
-import fr.kouignamann.cube.core.model.drawable.*;
-import fr.kouignamann.cube.core.model.gl.*;
-import org.lwjgl.*;
-import org.lwjgl.opengl.*;
-import org.lwjgl.util.vector.*;
-import org.slf4j.*;
-
-import java.nio.*;
-import java.util.*;
-
 import static fr.kouignamann.cube.core.Constant.*;
+
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.util.vector.Vector4f;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fr.kouignamann.cube.core.CubeAppTextures;
+import fr.kouignamann.cube.core.model.drawable.DrawableObject;
+import fr.kouignamann.cube.core.model.drawable.DrawableObjectPart;
+import fr.kouignamann.cube.core.model.gl.CubAppVector4f;
+import fr.kouignamann.cube.core.model.gl.Vertex;
 
 public class CubeBuilder extends DrawableObjectBuilder {
 
@@ -140,7 +151,7 @@ public class CubeBuilder extends DrawableObjectBuilder {
         faceVertices.stream().forEach(v -> v.setColor(RED));
         FloatBuffer verticesBuffer = buildVerticeBuffer(faceVertices);
         IntBuffer indicesBuffer = buildIndicesBuffer(CUBE_INDICES, 1);
-        return buildDrawableObject(verticesBuffer, indicesBuffer, null);
+        return buildDrawableObject(verticesBuffer, indicesBuffer, null, CubeAppTextures.CUBE_TEXTURE_NAME);
     }
 
     public static DrawableObject build3x3x3Cubes() {
@@ -189,6 +200,6 @@ public class CubeBuilder extends DrawableObjectBuilder {
         FloatBuffer verticesBuffer = buildVerticeBuffer(cubeVertices);
         IntBuffer indicesBuffer = buildIndicesBuffer(CUBE_INDICES, 27);
 
-        return buildDrawableObject(verticesBuffer, indicesBuffer, cubes);
+        return buildDrawableObject(verticesBuffer, indicesBuffer, cubes, CubeAppTextures.CUBE_TEXTURE_NAME);
     }
 }

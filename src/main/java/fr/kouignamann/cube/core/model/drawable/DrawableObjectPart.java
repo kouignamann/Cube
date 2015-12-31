@@ -1,14 +1,15 @@
 package fr.kouignamann.cube.core.model.drawable;
 
-import fr.kouignamann.cube.core.model.gl.*;
-import fr.kouignamann.cube.core.utils.*;
-import org.lwjgl.*;
-import org.lwjgl.util.vector.*;
-
-import java.nio.*;
-import java.util.*;
-
 import static fr.kouignamann.cube.core.utils.MathUtils.RotationAxis.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.lwjgl.util.vector.Vector3f;
+
+import fr.kouignamann.cube.core.model.gl.SelectionColor;
+import fr.kouignamann.cube.core.model.gl.Vertex;
+import fr.kouignamann.cube.core.utils.MathUtils;
 
 public class DrawableObjectPart {
 
@@ -41,16 +42,6 @@ public class DrawableObjectPart {
         }
         parent.getVerticeBuffer().rewind();
         return results;
-    }
-
-    public FloatBuffer readFloatSubBuffer() {
-        float[] floatElements = new float[nbElmements];
-        FloatBuffer subBuffer = BufferUtils.createFloatBuffer(nbElmements);
-        parent.getVerticeBuffer().get(floatElements);
-        subBuffer.put(floatElements);
-        subBuffer.flip();
-        parent.getVerticeBuffer().rewind();
-        return subBuffer;
     }
 
     public void pushVertice(List<Vertex> vertice) {

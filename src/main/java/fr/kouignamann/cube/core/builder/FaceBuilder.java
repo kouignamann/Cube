@@ -1,12 +1,16 @@
 package fr.kouignamann.cube.core.builder;
 
-import fr.kouignamann.cube.core.model.drawable.*;
-import fr.kouignamann.cube.core.model.gl.*;
-
-import java.nio.*;
-import java.util.*;
-
 import static fr.kouignamann.cube.core.Constant.*;
+
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import fr.kouignamann.cube.core.CubeAppTextures;
+import fr.kouignamann.cube.core.model.drawable.DrawableObject;
+import fr.kouignamann.cube.core.model.gl.Vertex;
 
 public class FaceBuilder extends DrawableObjectBuilder {
 
@@ -35,7 +39,7 @@ public class FaceBuilder extends DrawableObjectBuilder {
         FloatBuffer verticesBuffer = buildVerticeBuffer(faceVertices);
         IntBuffer indicesBuffer = buildIndicesBuffer(FACE_INDICES, 1);
 
-        return buildDrawableObject(verticesBuffer, indicesBuffer, newSingleDrawableObjectPartAsList(FACE_INDICES.length));
+        return buildDrawableObject(verticesBuffer, indicesBuffer, newSingleDrawableObjectPartAsList(FACE_INDICES.length), CubeAppTextures.CUBE_TEXTURE_NAME);
     }
 
     public static DrawableObject build3x3Faces() {
@@ -52,6 +56,6 @@ public class FaceBuilder extends DrawableObjectBuilder {
         faceVertices.stream().forEach(v -> v.setColor(RED));
         FloatBuffer verticesBuffer = buildVerticeBuffer(faceVertices);
         IntBuffer indicesBuffer = buildIndicesBuffer(FACE_INDICES, 9);
-        return buildDrawableObject(verticesBuffer, indicesBuffer, newSingleDrawableObjectPartAsList(FACE_INDICES.length*9));
+        return buildDrawableObject(verticesBuffer, indicesBuffer, newSingleDrawableObjectPartAsList(FACE_INDICES.length*9), CubeAppTextures.CUBE_TEXTURE_NAME);
     }
 }

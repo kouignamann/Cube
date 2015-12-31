@@ -1,13 +1,22 @@
 package fr.kouignamann.cube.core.builder;
 
-import fr.kouignamann.cube.core.model.drawable.*;
-import fr.kouignamann.cube.core.model.gl.*;
-import fr.kouignamann.cube.core.utils.*;
-import org.lwjgl.*;
-import org.lwjgl.opengl.*;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import java.nio.*;
-import java.util.*;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
+
+import fr.kouignamann.cube.core.CubeAppTextures;
+import fr.kouignamann.cube.core.model.drawable.DrawableObject;
+import fr.kouignamann.cube.core.model.drawable.DrawableObjectPart;
+import fr.kouignamann.cube.core.model.gl.Vertex;
+import fr.kouignamann.cube.core.utils.GlUtils;
 
 public abstract class DrawableObjectBuilder {
 
@@ -39,7 +48,7 @@ public abstract class DrawableObjectBuilder {
         return results;
     }
 
-    protected static DrawableObject buildDrawableObject(FloatBuffer verticesBuffer, IntBuffer indicesBuffer, List<DrawableObjectPart> parts) {
+    protected static DrawableObject buildDrawableObject(FloatBuffer verticesBuffer, IntBuffer indicesBuffer, List<DrawableObjectPart> parts, String textureName) {
         int vaoId = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vaoId);
         int vboId = GL15.glGenBuffers();
@@ -57,8 +66,10 @@ public abstract class DrawableObjectBuilder {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
         GL30.glBindVertexArray(0);
 
-        GlUtils.exitOnGLError("Failed face build");
+        int textureId = CubeAppTextures.getTextureId(textureName);
 
-        return new DrawableObject(vaoId, vboId, vboiId, indicesBuffer.limit(), verticesBuffer, parts);
+        GlUtils.exitOnGLError("Failed drawable object build");
+
+        return new DrawableObject(vaoId, vboId, vboiId, indicesBuffer.limit(), textureId, verticesBuffer, parts);
     }
 }
