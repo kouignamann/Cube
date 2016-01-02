@@ -1,29 +1,16 @@
 package fr.kouignamann.cube.core;
 
+import fr.kouignamann.cube.core.model.drawable.*;
+import fr.kouignamann.cube.core.model.drawable.shader.*;
+import fr.kouignamann.cube.core.model.gl.*;
+import fr.kouignamann.cube.core.utils.*;
+import org.lwjgl.*;
+import org.lwjgl.opengl.*;
+import org.slf4j.*;
+
+import java.util.*;
+
 import static fr.kouignamann.cube.core.Constant.*;
-
-import java.util.List;
-
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.PixelFormat;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import fr.kouignamann.cube.core.model.drawable.DrawableObject;
-import fr.kouignamann.cube.core.model.drawable.DrawableObjectPart;
-import fr.kouignamann.cube.core.model.drawable.shader.ShaderObject;
-import fr.kouignamann.cube.core.model.drawable.shader.SimpleCubeShader;
-import fr.kouignamann.cube.core.model.gl.Camera;
-import fr.kouignamann.cube.core.model.gl.Vertex;
-import fr.kouignamann.cube.core.utils.GlUtils;
 
 public class CubeAppGraphics {
 
@@ -119,14 +106,24 @@ public class CubeAppGraphics {
         GL20.glUseProgram(0);
     }
 
-    public static void addCameraMovement(float movement) {
+    synchronized public static void addCameraMovement(float movement) {
         checkCtx();
         graphics.cubeAppCamera.addMovement(movement);
     }
 
-    public static void addCameraRotation(float deltaX, float deltaY) {
+    synchronized public static void addCameraRotation(float deltaX, float deltaY) {
         checkCtx();
         graphics.cubeAppCamera.addRotation(deltaX, deltaY);
+    }
+
+    synchronized public static void registerStrafeCamera(boolean strafeLeft) {
+        checkCtx();
+        graphics.cubeAppCamera.strafe(strafeLeft);
+    }
+
+    synchronized public static void registerWalkCamera(boolean goForward) {
+        checkCtx();
+        graphics.cubeAppCamera.walk(goForward);
     }
 
     public static Camera getCamera() {

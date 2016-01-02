@@ -160,14 +160,13 @@ public class CubeAppLogics {
 
     synchronized public static void registerXCubeRotation(boolean directRotation) {
         checkCtx();
+        float rotationAngle = (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED;
         if (logics.selectedDrawableObjectPart != null) {
-            logics.selectedDrawableObjectPart.getRotation().setX(
-                    logics.selectedDrawableObjectPart.getRotation().getX() +
-                    (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED);
+            logics.selectedDrawableObjectPart.rotateX(rotationAngle);
         } else {
             for (DrawableObject object : logics.dObjects) {
                 for (DrawableObjectPart part : object.getParts()) {
-                    part.getRotation().setX(part.getRotation().getX() + (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED);
+                    part.rotateX(rotationAngle);
                 }
             }
         }
@@ -175,14 +174,13 @@ public class CubeAppLogics {
 
     synchronized public static void registerYCubeRotation(boolean directRotation) {
         checkCtx();
+        float rotationAngle = (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED;
         if (logics.selectedDrawableObjectPart != null) {
-            logics.selectedDrawableObjectPart.getRotation().setY(
-                    logics.selectedDrawableObjectPart.getRotation().getY() +
-                    (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED);
+            logics.selectedDrawableObjectPart.rotateY(rotationAngle);
         } else {
             for (DrawableObject object : logics.dObjects) {
                 for (DrawableObjectPart part : object.getParts()) {
-                    part.getRotation().setY(part.getRotation().getY() + (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED);
+                    part.rotateY(rotationAngle);
                 }
             }
         }
@@ -190,14 +188,13 @@ public class CubeAppLogics {
 
     synchronized public static void registerZCubeRotation(boolean directRotation) {
         checkCtx();
+        float rotationAngle = (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED;
         if (logics.selectedDrawableObjectPart != null) {
-            logics.selectedDrawableObjectPart.getRotation().setZ(
-                    logics.selectedDrawableObjectPart.getRotation().getZ() +
-                            (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED);
+            logics.selectedDrawableObjectPart.rotateZ(rotationAngle);
         } else {
             for (DrawableObject object : logics.dObjects) {
                 for (DrawableObjectPart part : object.getParts()) {
-                    part.getRotation().setZ(part.getRotation().getZ() + (directRotation ? 1f : -1f) * Constant.CUBE_ROTATION_SPEED);
+                    part.rotateZ(rotationAngle);
                 }
             }
         }

@@ -12,7 +12,7 @@ import static fr.kouignamann.cube.core.Constant.*;
 public class QuadBuilder extends DrawableObjectBuilder {
 
     private final static float FACE_WIDTH = 100f;
-    private final static float CUBE_WIDTH = 400f;
+    private final static float CUBE_WIDTH = 800f;
 
     private final static float FACE_MARGIN = 1f;
     private final static float FACE_REAL_WIDTH = FACE_WIDTH - FACE_MARGIN;

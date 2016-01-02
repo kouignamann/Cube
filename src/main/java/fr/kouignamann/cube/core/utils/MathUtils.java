@@ -18,32 +18,35 @@ public class MathUtils {
         return (float)(1f / Math.tan(angle));
     }
 
-    public static float[] computeRotationAnimationMatrix(Vector3f rotation, RotationAxis axis) {
+    public static float[] computeRotationMatrix(Vector3f rotation, RotationAxis axis, float[] dest) {
+        if (dest == null) {
+            dest = new float[9];
+        }
         switch (axis) {
             case X_AXIS:
                 // MATRIX : X ROTATION
-                return new float[] {
-                        1.0f, 0.0f, 0.0f,
-                        0.0f, (float)Math.cos(rotation.getX()), -(float)Math.sin(rotation.getX()),
-                        0.0f, (float)Math.sin(rotation.getX()), (float)Math.cos(rotation.getX())};
+                dest[0] = 1f;     dest[1] = 0f;                                     dest[2] = 0f;
+                dest[3] = 0f;     dest[4] = (float)Math.cos(rotation.getX());       dest[5] = -(float)Math.sin(rotation.getX());
+                dest[6] = 0f;     dest[7] = (float)Math.sin(rotation.getX());       dest[8] = (float)Math.cos(rotation.getX());
+                return dest;
             case Y_AXIS:
                 // MATRIX : Y ROTATION
-                return new float[] {
-                        (float)Math.cos(rotation.getY()), 0.0f, (float)Math.sin(rotation.getY()),
-                        0.0f, 1.0f, 0.0f,
-                        -(float)Math.sin(rotation.getY()), 0.0f, (float)Math.cos(rotation.getY())};
+                dest[0] = (float)Math.cos(rotation.getY());     dest[1] = 0f;       dest[2] = (float)Math.sin(rotation.getY());
+                dest[3] = 0f;                                   dest[4] = 1f;       dest[5] = 0f;
+                dest[6] = -(float)Math.sin(rotation.getY());    dest[7] = 0f;       dest[8] = (float)Math.cos(rotation.getY());
+                return dest;
             case Z_AXIS:
                 // MATRIX : Z ROTATION
-                return new float[] {
-                        (float)Math.cos(rotation.getZ()), -(float)Math.sin(rotation.getZ()), 0.0f,
-                        (float)Math.sin(rotation.getZ()), (float)Math.cos(rotation.getZ()), 0.0f,
-                        0.0f, 0.0f, 1.0f};
+                dest[0] = (float)Math.cos(rotation.getZ());     dest[1] = -(float)Math.sin(rotation.getZ());    dest[2] = 0f;
+                dest[3] = (float)Math.sin(rotation.getZ());     dest[4] = (float)Math.cos(rotation.getZ());     dest[5] = 0f;
+                dest[6] = 0f;                                   dest[7] = 0f;                                   dest[8] = 1f;
+                return dest;
             default:
                 // IDENTITY MATRIX (no rotation)
-                return new float[] {
-                        1.0f, 0.0f, 0.0f,
-                        0.0f, 1.0f, 0.0f,
-                        0.0f, 0.0f, 1.0f};
+                dest[0] = 1f;   dest[1] = 0f;   dest[2] = 0f;
+                dest[3] = 0f;   dest[4] = 1f;   dest[5] = 0f;
+                dest[6] = 0f;   dest[7] = 0f;   dest[8] = 1f;
+                return dest;
         }
     }
 }

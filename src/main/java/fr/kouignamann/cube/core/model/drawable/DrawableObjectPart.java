@@ -21,6 +21,9 @@ public class DrawableObjectPart {
     private int nbVertex;
     private int startVertexIndex;
     private int nbElmements;
+    private float[] xRotationMatrix;
+    private float[] yRotationMatrix;
+    private float[] zRotationMatrix;
 
     public DrawableObjectPart(int startIndex, int length, boolean selectable) {
         this.startIndex = startIndex;
@@ -29,6 +32,9 @@ public class DrawableObjectPart {
         this.startVertexIndex = 4*startIndex/6;
         this.selectionColor = selectable ? SelectionColor.getNextSelectionColor() : SelectionColor.NOTHING;
         this.nbElmements = nbVertex*Vertex.ELEMENT_COUNT;
+        this.xRotationMatrix = MathUtils.computeRotationMatrix(rotation, X_AXIS, null);
+        this.yRotationMatrix = MathUtils.computeRotationMatrix(rotation, Y_AXIS, null);
+        this.zRotationMatrix = MathUtils.computeRotationMatrix(rotation, Z_AXIS, null);
     }
 
     public List<Vertex> readVertice() {
@@ -54,15 +60,30 @@ public class DrawableObjectPart {
     }
 
     public float[] getxRotationMatrix() {
-        return MathUtils.computeRotationAnimationMatrix(rotation, X_AXIS);
+        return xRotationMatrix;
     }
 
     public float[] getyRotationMatrix() {
-        return MathUtils.computeRotationAnimationMatrix(rotation, Y_AXIS);
+        return yRotationMatrix;
     }
 
     public float[] getzRotationMatrix() {
-        return MathUtils.computeRotationAnimationMatrix(rotation, Z_AXIS);
+        return zRotationMatrix;
+    }
+
+    public void rotateX(float xRotation) {
+        rotation.x += xRotation;
+        MathUtils.computeRotationMatrix(rotation, X_AXIS, xRotationMatrix);
+    }
+
+    public void rotateY(float yRotation) {
+        rotation.y += yRotation;
+        MathUtils.computeRotationMatrix(rotation, Y_AXIS, yRotationMatrix);
+    }
+
+    public void rotateZ(float zRotation) {
+        rotation.z += zRotation;
+        MathUtils.computeRotationMatrix(rotation, Z_AXIS, zRotationMatrix);
     }
 
     public int getStartIndex() {
@@ -91,9 +112,6 @@ public class DrawableObjectPart {
     }
     public void setScale(float scale) {
         this.scale = scale;
-    }
-    public Vector3f getRotation() {
-        return rotation;
     }
     public DrawableObject getParent() {
         return parent;

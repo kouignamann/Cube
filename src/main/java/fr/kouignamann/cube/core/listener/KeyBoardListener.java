@@ -1,11 +1,8 @@
 package fr.kouignamann.cube.core.listener;
 
-import org.lwjgl.input.Keyboard;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import fr.kouignamann.cube.core.Constant;
-import fr.kouignamann.cube.core.CubeAppLogics;
+import fr.kouignamann.cube.core.*;
+import org.lwjgl.input.*;
+import org.slf4j.*;
 
 public class KeyBoardListener implements Runnable {
 
@@ -33,6 +30,20 @@ public class KeyBoardListener implements Runnable {
 	}
 
 	private void listen() {
+		if (Keyboard.isKeyDown(Keyboard.KEY_Z)) {
+			CubeAppGraphics.registerWalkCamera(true);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+			CubeAppGraphics.registerWalkCamera(false);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
+			CubeAppGraphics.registerStrafeCamera(true);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+			CubeAppGraphics.registerStrafeCamera(false);
+		}
+
+
 		if (Keyboard.isKeyDown(Keyboard.KEY_ADD)) {
 			CubeAppLogics.registerCubeScale(true);
 			keyhitOnCooldown = true;

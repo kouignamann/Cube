@@ -29,6 +29,7 @@ public final class Constant {
 	// CAMERA
 	public final static Vector3f	INITIAL_CAMERA_POSITION			= new Vector3f(0, 0, -1);
 	public final static Vector3f	INITIAL_CAMERA_ROTATION			= new Vector3f(0, 0, 0);
+	public final static float		CAMERA_MOVEMENT_SPEED			= 0.015f;
 
 	// GRAPHICS
 	public final static int			SCALE							= 500;
