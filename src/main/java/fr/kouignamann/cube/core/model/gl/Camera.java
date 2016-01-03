@@ -50,8 +50,8 @@ public class Camera {
         cameraRotation = Constant.INITIAL_CAMERA_ROTATION;
         cameraWalkVector = new CameraMouvementVector3f(true);
         cameraStrafeVector = new CameraMouvementVector3f(false);
-        xCameraRotationMatrix = MathUtils.computeRotationMatrix(cameraRotation, X_AXIS, null);
-        yCameraRotationMatrix = MathUtils.computeRotationMatrix(cameraRotation, Y_AXIS, null);
+        xCameraRotationMatrix = MathUtils.computeRotationMatrix(-cameraRotation.getX(), X_AXIS, null);
+        yCameraRotationMatrix = MathUtils.computeRotationMatrix(cameraRotation.getY(), Y_AXIS, null);
         computeMvtVectors();
 
         modelMatrix = new Matrix4f();
@@ -72,16 +72,26 @@ public class Camera {
     }
 
     private void computeMvtVectors() {
-        MathUtils.computeRotationMatrix(cameraRotation, X_AXIS, xCameraRotationMatrix);
-        MathUtils.computeRotationMatrix(cameraRotation, Y_AXIS, yCameraRotationMatrix);
+        MathUtils.computeRotationMatrix(-cameraRotation.getX(), X_AXIS, xCameraRotationMatrix);
+        MathUtils.computeRotationMatrix(cameraRotation.getY(), Y_AXIS, yCameraRotationMatrix);
+        cameraWalkVector.reset();
         cameraWalkVector.rotate(xCameraRotationMatrix);
         cameraWalkVector.rotate(yCameraRotationMatrix);
-        cameraStrafeVector.rotate(xCameraRotationMatrix);
+        cameraStrafeVector.reset();
         cameraStrafeVector.rotate(yCameraRotationMatrix);
-        logger.info("New mvt vector ::");
-        logger.info("walk = " + cameraWalkVector);
-        logger.info("strafe = " + cameraStrafeVector);
-        logger.info(" ---");
+    }
+
+    public void printCameraDataInfo() {
+        logger.info("Camera Infos");
+        logger.info(String.format("position vector : {x=%f, y=%f, z=%f}",
+                cameraPosition.x, cameraPosition.y, cameraPosition.z));
+        logger.info(String.format("rotation vector : {x=%f, y=%f, z=%f}",
+                cameraRotation.x, cameraRotation.y, cameraRotation.z));
+        logger.info(String.format("walk vector : {x=%f, y=%f, z=%f}",
+                cameraWalkVector.x, cameraWalkVector.y, cameraWalkVector.z));
+        logger.info(String.format("strafe vector : {x=%f, y=%f, z=%f}",
+                cameraStrafeVector.x, cameraStrafeVector.y, cameraStrafeVector.z));
+        logger.info("---");
     }
 	
     public void addRotation(float deltaX, float deltaY)

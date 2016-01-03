@@ -32,9 +32,9 @@ public class DrawableObjectPart {
         this.startVertexIndex = 4*startIndex/6;
         this.selectionColor = selectable ? SelectionColor.getNextSelectionColor() : SelectionColor.NOTHING;
         this.nbElmements = nbVertex*Vertex.ELEMENT_COUNT;
-        this.xRotationMatrix = MathUtils.computeRotationMatrix(rotation, X_AXIS, null);
-        this.yRotationMatrix = MathUtils.computeRotationMatrix(rotation, Y_AXIS, null);
-        this.zRotationMatrix = MathUtils.computeRotationMatrix(rotation, Z_AXIS, null);
+        this.xRotationMatrix = MathUtils.computeRotationMatrix(rotation.getX(), X_AXIS, null);
+        this.yRotationMatrix = MathUtils.computeRotationMatrix(rotation.getY(), Y_AXIS, null);
+        this.zRotationMatrix = MathUtils.computeRotationMatrix(rotation.getZ(), Z_AXIS, null);
     }
 
     public List<Vertex> readVertice() {
@@ -73,17 +73,17 @@ public class DrawableObjectPart {
 
     public void rotateX(float xRotation) {
         rotation.x += xRotation;
-        MathUtils.computeRotationMatrix(rotation, X_AXIS, xRotationMatrix);
+        MathUtils.computeRotationMatrix(rotation.getX(), X_AXIS, xRotationMatrix);
     }
 
     public void rotateY(float yRotation) {
         rotation.y += yRotation;
-        MathUtils.computeRotationMatrix(rotation, Y_AXIS, yRotationMatrix);
+        MathUtils.computeRotationMatrix(rotation.getY(), Y_AXIS, yRotationMatrix);
     }
 
     public void rotateZ(float zRotation) {
         rotation.z += zRotation;
-        MathUtils.computeRotationMatrix(rotation, Z_AXIS, zRotationMatrix);
+        MathUtils.computeRotationMatrix(rotation.getZ(), Z_AXIS, zRotationMatrix);
     }
 
     public int getStartIndex() {

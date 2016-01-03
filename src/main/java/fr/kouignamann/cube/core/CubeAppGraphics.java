@@ -131,6 +131,11 @@ public class CubeAppGraphics {
         return graphics.cubeAppCamera;
     }
 
+    public static void printCameraInfo() {
+        checkCtx();
+        graphics.cubeAppCamera.printCameraDataInfo();
+    }
+
     private static void checkCtx() {
         if (graphics == null) {
             throw new IllegalStateException("CubeAppGraphics is null");

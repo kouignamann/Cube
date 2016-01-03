@@ -5,8 +5,15 @@ import org.lwjgl.util.vector.*;
 
 public class CameraMouvementVector3f extends Vector3f {
 
+    private boolean walkVector;
+
     public CameraMouvementVector3f(boolean walkVector) {
         super(0f, 0f, 0f);
+        this.walkVector = walkVector;
+    }
+
+    public void reset() {
+        set(0f, 0f, 0f);
         if (walkVector) {
             this.setZ(Constant.CAMERA_MOVEMENT_SPEED);
         } else {
