@@ -138,7 +138,7 @@ public class CubeBuilder extends DrawableObjectBuilder {
     public static DrawableObject buildCube() {
         logger.info("Building single cube");
         List<Vertex> faceVertices = getCubeVectors(0, 0, 0);
-        faceVertices.stream().forEach(v -> v.setColor(RED));
+        faceVertices.stream().forEach(v -> v.setColor(WHITE));
         FloatBuffer verticesBuffer = buildVerticeBuffer(faceVertices);
         IntBuffer indicesBuffer = buildIndicesBuffer(CUBE_INDICES, 1);
         return buildDrawableObject(verticesBuffer, indicesBuffer, newSingleDrawableObjectPartAsList(CUBE_INDICES.length, true), CubeAppTextures.CUBE_TEXTURE_NAME, CubeBuilder::changeDrawableGeometry);
@@ -175,7 +175,7 @@ public class CubeBuilder extends DrawableObjectBuilder {
         cubeVertices.addAll(getCubeVectors(-1, -1, -1));
         cubeVertices.addAll(getCubeVectors(0, -1, -1));
         cubeVertices.addAll(getCubeVectors(1, -1, -1));
-        cubeVertices.stream().forEach(v -> v.setColor(RED));
+        cubeVertices.stream().forEach(v -> v.setColor(WHITE));
 
         int nbIndicesPerCube = CUBE_INDICES.length;
         for (int i = 0; i < 27; i++) {

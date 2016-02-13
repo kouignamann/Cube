@@ -29,6 +29,25 @@ public class GlUtils {
         }
     }
 
+    public static void initMyoLibs() {
+        try {
+            logger.info("Loading myo natives");
+            java.awt.Toolkit.getDefaultToolkit();
+            String javaLibPath = System.getProperty("java.library.path");
+            String pathSeparator = System.getProperty("path.separator");
+            System.setProperty(
+                    "java.library.path",
+                    javaLibPath + pathSeparator + "target/executable/natives/x64/" + pathSeparator + "natives/x64/");
+            Field sysPath = ClassLoader.class.getDeclaredField("sys_paths");
+            sysPath.setAccessible(true);
+            sysPath.set(null, null);
+        }
+        catch (NoSuchFieldException | IllegalAccessException | UnsatisfiedLinkError e) {
+            logger.error("Loading natives error", e);
+            System.exit(-1);
+        }
+    }
+
     public static void exitOnGLError(String errorMessage) {
         int errorValue = GL11.glGetError();
         if (errorValue != GL11.GL_NO_ERROR) {

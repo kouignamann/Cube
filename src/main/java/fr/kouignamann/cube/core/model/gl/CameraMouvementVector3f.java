@@ -8,16 +8,16 @@ public class CameraMouvementVector3f extends Vector3f {
     private boolean walkVector;
 
     public CameraMouvementVector3f(boolean walkVector) {
-        super(0f, 0f, 0f);
+        super();
         this.walkVector = walkVector;
+        reset();
     }
 
     public void reset() {
-        set(0f, 0f, 0f);
         if (walkVector) {
-            this.setZ(Constant.CAMERA_MOVEMENT_SPEED);
+            set(0f, 0f, Constant.CAMERA_MOVEMENT_SPEED);
         } else {
-            this.setX(Constant.CAMERA_MOVEMENT_SPEED);
+            set(Constant.CAMERA_MOVEMENT_SPEED, 0f, 0f);
         }
     }
 

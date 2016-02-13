@@ -109,7 +109,7 @@ public class CubeAppLogics {
             if (selectedPart != null) {
                 if (logics.selectedDrawableObjectPart != null) {
                     List<Vertex> selectedVertice = logics.selectedDrawableObjectPart.readVertice();
-                    selectedVertice.forEach(v -> v.setColor(Constant.RED));
+                    selectedVertice.forEach(v -> v.setColor(Constant.WHITE));
                     logics.selectedDrawableObjectPart.pushVertice(selectedVertice);
                 }
                 logics.selectedDrawableObjectPart = selectedPart;
@@ -120,7 +120,7 @@ public class CubeAppLogics {
         }
         else if (logics.selectedDrawableObjectPart != null) {
             List<Vertex> selectedVertice = logics.selectedDrawableObjectPart.readVertice();
-            selectedVertice.forEach(v -> v.setColor(Constant.RED));
+            selectedVertice.forEach(v -> v.setColor(Constant.WHITE));
             logics.selectedDrawableObjectPart.pushVertice(selectedVertice);
             logics.selectedDrawableObjectPart = null;
         }

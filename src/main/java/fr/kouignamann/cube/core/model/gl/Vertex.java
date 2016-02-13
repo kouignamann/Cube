@@ -90,9 +90,7 @@ public class Vertex {
     }
     
 	public Vertex setPosition(Vector4f vector4f) {
-        //TODO see what happens when uncomment
-//        this.xyzw = new float[] {vector4f.getX(),vector4f.getY(), vector4f.getZ(), vector4f.getW()};
-        this.xyzw = new float[] {vector4f.getX(),vector4f.getY(), vector4f.getZ(), 1};
+        this.xyzw = new float[] {vector4f.getX(),vector4f.getY(), vector4f.getZ(), vector4f.getW()};
         return this;
     }
 
